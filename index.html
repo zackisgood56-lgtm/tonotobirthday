@@ -41,7 +41,7 @@
     }  
 
     @media (pointer: fine) {  
-        body, #game-container, .relic-box, #music-btn, #foca-dvd, #glitch-heart { cursor: none; }  
+        body, #game-container, .relic-box, #music-btn, #foca-dvd, #glitch-heart, .secret-trigger { cursor: none; }  
     }  
 
     /* --- Fondo de Partículas --- */  
@@ -72,9 +72,6 @@
         font-size: 0.85rem;  
         text-transform: uppercase;  
         letter-spacing: 1.5px;  
-        display: flex;  
-        align-items: center;  
-        gap: 10px;  
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);  
         transition: all 0.3s ease;  
     }  
@@ -119,7 +116,6 @@
         user-select: none;  
         touch-action: none;  
         filter: drop-shadow(0 0 15px #ff0055);  
-        cursor: pointer;  
         animation: heartPulse 0.6s infinite alternate;  
     }  
 
@@ -228,6 +224,26 @@
     .polaroid-box img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border: 1px solid #ddd; background: #050505; }  
     .polaroid-box .caption { font-family: var(--font-display); font-style: italic; color: #1a1a24; font-size: 1.15rem; margin-top: 18px; text-align: center; font-weight: 600; }  
 
+    /* Contenedor relativo para el botón invisible */
+    .img-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    /* BOTÓN INVISIBLE EN LA POLAROID 1 */
+    .secret-trigger {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 45px;
+        height: 45px;
+        background: transparent;
+        border: none;
+        outline: none;
+        z-index: 210;
+        cursor: pointer;
+    }
+
     /* --- Animaciones --- */  
     @keyframes floatAnimation { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }  
     @keyframes spinFoca { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }  
@@ -280,7 +296,10 @@
 </div>  
 
 <div id="polaroid-container" class="polaroid-box">  
-    <img src="tonotos.jpg" alt="Tonotos">  
+    <div class="img-wrapper">
+        <img src="tonotos.jpg" alt="Tonotos">  
+        <button class="secret-trigger" onclick="askSecretCode(event)" ontouchstart="askSecretCode(event)"></button>
+    </div>
     <div class="caption">te amo feliz cumpleaños tonoto :3</div>  
 </div>  
 
@@ -289,8 +308,13 @@
     <div class="caption" style="color: #ff0055;">te amo feliz cumpleaños tonoto :3</div>  
 </div>  
 
+<div id="polaroid-final" class="polaroid-box" style="box-shadow: 0 35px 80px rgba(0,0,0,0.9), 0 0 50px rgba(255, 215, 0, 0.5);">  
+    <img src="birthday.jpg" alt="Feliz Cumpleaños">  
+    <div class="caption" style="font-size: 1.25rem; color: #b8860b;">✨ ¡Te amo feliz cumpleaños tonoto :3! ✨</div>  
+</div>
+
 <script>  
-    let failCount = 0; // Registro de caídas  
+    let failCount = 0;   
 
     // --- Audio ---  
     function toggleAudio(e) {  
@@ -313,7 +337,7 @@
         setTimeout(initFocaDVD, 1500);  
     }  
 
-    // --- Partículas Genéricas ---  
+    // --- Partículas de Fondo ---  
     const canvasBg = document.getElementById('bg-canvas'); const ctxBg = canvasBg.getContext('2d');  
     function resizeCanvas() { canvasBg.width = window.innerWidth; canvasBg.height = window.innerHeight; }  
     window.addEventListener('resize', resizeCanvas); resizeCanvas();  
@@ -368,37 +392,64 @@
         }, 800);  
     }  
 
+    // --- APARTADO NUEVO: CUADRO DE DIÁLOGO Y POLAROID FINAL ---
+    function askSecretCode(e) {
+        if(e) e.stopPropagation();
+        
+        // Lanzar prompt solicitando la contraseña maestra
+        const codeInput = prompt("Introduce el código de acceso definitivo:");
+        
+        if (codeInput && codeInput.trim() === "tonotosforever") {
+            // Desvanecer Polaroid 1
+            const currentPol = document.getElementById('polaroid-container');
+            currentPol.style.transform = 'scale(0) rotate(20deg)';
+            
+            // Efecto de mini interferencia de éxito
+            document.body.classList.add('glitch-active');
+            
+            setTimeout(() => {
+                document.body.classList.remove('glitch-active');
+                currentPol.style.display = 'none';
+                
+                // Mostrar Polaroid final con birthday.jpg
+                const finalPol = document.getElementById('polaroid-final');
+                finalPol.style.display = 'flex';
+                setTimeout(() => {
+                    finalPol.style.transform = 'scale(1.05) rotate(2deg)';
+                }, 50);
+            }, 600);
+        } else if (codeInput !== null) {
+            alert("Código incorrecto... El secreto sigue bajo llave.");
+        }
+    }
+
     // --- ACTIVACIÓN RUTA OCULTA (FALLA 4) ---  
     let heartInterval = null;  
     function triggerSecretGlitchGame() {  
         document.getElementById('game-container').style.display = 'none';  
-        document.body.classList.add('glitch-active'); // Primer glitch violento  
+        document.body.classList.add('glitch-active');   
           
         setTimeout(() => {  
             document.body.classList.remove('glitch-active');  
             const heart = document.getElementById('glitch-heart');  
             heart.style.display = 'block';  
-            
-            // Lógica para mover el corazón aleatoriamente y rápido  
+              
             heartInterval = setInterval(() => {  
                 const rx = Math.random() * (window.innerWidth - 80);  
                 const ry = Math.random() * (window.innerHeight - 80);  
-                heart.style.left = rx + 'px';  
-                heart.style.top = ry + 'px';  
-            }, 550); // Cambia de lugar velozmente  
+                heart.style.left = rx + 'px'; heart.style.top = ry + 'px';  
+            }, 550);  
         }, 1000);  
     }  
 
     function catchHeart(e) {  
-        if(e) e.stopPropagation();  
-        clearInterval(heartInterval);  
+        if(e) e.stopPropagation(); clearInterval(heartInterval);  
         document.getElementById('glitch-heart').style.display = 'none';  
-        document.body.classList.add('glitch-active'); // Segundo glitch terminal  
+        document.body.classList.add('glitch-active');  
 
         setTimeout(() => {  
             document.body.classList.remove('glitch-active');  
-            const secretPol = document.getElementById('polaroid-secret');  
-            secretPol.style.display = 'flex';  
+            const secretPol = document.getElementById('polaroid-secret'); secretPol.style.display = 'flex';  
             setTimeout(() => { secretPol.style.transform = 'scale(1) rotate(5deg)'; }, 50);  
         }, 900);  
     }  
