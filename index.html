@@ -4,60 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para el Rey de los Corazones</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-color: #020205;
-            --cobalt-primary: #0047AB;
-            --cobalt-glow: #1e90ff;
-            --relic-metal: #121218;
-            --relic-accent: #1e2a3a;
-            --text-main: #f0f0f5;
-            --text-accent: #d1c7bd;
-            --gold-light: #f5e0ac;
-            --transition-speed: 0.8s;
-            --font-display: 'Playfair Display', serif;
-            --font-ui: 'Space Grotesk', sans-serif;
+            --bg-dark: #030408;
+            --cobalt-dark: #0a1128;
+            --cobalt-border: #1c3166;
+            --gold-glow: #d4af37;
+            --paper-color: #fffbf2;
+            --text-color: #1a1a1a;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            cursor: none; /* Ocultar cursor para usar el personalizado */
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow: hidden;
-            font-family: var(--font-ui);
+            background-color: var(--bg-dark);
             height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Playfair Display', serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 2000px; /* Profundidad para el relicario */
+            position: relative;
         }
 
-        /* --- Cursor Personalizado Avanzado --- */
-        #custom-cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--cobalt-glow);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 1000;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background-color 0.3s;
-            mix-blend-mode: difference;
-        }
-
-        /* --- Canva de Partículas de Fondo Reactivas --- */
-        #bg-canvas {
+        /* --- FUEGOS ARTIFICIALES (FONDO TOTAL) --- */
+        canvas {
             position: absolute;
             top: 0;
             left: 0;
@@ -67,354 +48,323 @@
             pointer-events: none;
         }
 
-        /* --- Controles de Música Estilizados --- */
+        /* --- BOTÓN DE MÚSICA PREMIUM --- */
         #music-btn {
             position: fixed;
-            top: 25px;
-            right: 25px;
+            top: 20px;
+            right: 20px;
             z-index: 100;
-            background: rgba(0, 71, 171, 0.2);
+            background: rgba(10, 17, 40, 0.7);
             backdrop-filter: blur(8px);
-            border: 1px solid var(--cobalt-glow);
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-family: var(--font-ui);
-            color: white;
-            font-size: 0.9rem;
-            text-transform: uppercase;
+            border: 1px solid var(--cobalt-border);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-family: 'Cinzel', serif;
             letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 5px 20px rgba(0, 112, 255, 0.15);
-            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(28, 49, 102, 0.4);
+            transition: all 0.3s ease;
         }
 
-        #music-btn:hover {
-            background: rgba(0, 112, 255, 0.4);
-            box-shadow: 0 10px 30px rgba(0, 112, 255, 0.3);
-        }
-
-        /* --- RELICARIO DIGITAL AVANZADO (Estructura) --- */
-        #relic-scene {
-            width: 450px;
-            height: 350px;
+        /* --- CONTENEDOR PRINCIPAL DEL SOBRE --- */
+        .envelope-container {
             position: relative;
-            transform-style: preserve-3d;
-            transition: transform var(--transition-speed);
+            width: 90%;
+            max-width: 400px;
+            height: 260px;
             z-index: 10;
+            perspective: 1500px;
         }
 
-        #relic-scene.open {
-            transform: rotateX(10deg) translateY(50px) scale(1.05);
-        }
-
-        .relic-wrapper {
+        /* El Sobre */
+        .envelope {
+            position: absolute;
             width: 100%;
             height: 100%;
-            position: absolute;
+            background-color: var(--cobalt-dark);
+            border: 1px solid var(--cobalt-border);
+            border-radius: 8px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            cursor: pointer;
             transform-style: preserve-3d;
-            transform-origin: center;
-            animation: slowSpin 30s linear infinite;
+            transition: transform 0.8s ease;
         }
 
-        /* Frontal del Relicario (Paneles Hexagonales Giramtorios) */
-        .relic-front {
+        /* Triángulos del frente del sobre */
+        .envelope-front-design {
+            position: absolute;
             width: 100%;
             height: 100%;
-            position: absolute;
-            background-color: var(--relic-metal);
-            border-radius: 12px;
-            box-shadow: 0 30px 90px rgba(0,0,0,0.9);
-            transform-style: preserve-3d;
-            display: flex;
-            overflow: hidden;
             z-index: 5;
-        }
-
-        .relic-door {
-            width: 50%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            background-color: var(--relic-accent);
-            border: 1px solid rgba(255,255,255,0.05);
-            transform-style: preserve-3d;
-            transition: transform var(--transition-speed) cubic-bezier(0.6, -0.28, 0.735, 0.045), z-index var(--transition-speed);
-        }
-
-        .relic-door.left {
-            left: 0;
-            border-radius: 12px 0 0 12px;
-            transform-origin: right;
-            border-right: 2px solid var(--cobalt-primary);
-        }
-
-        .relic-door.right {
-            right: 0;
-            border-radius: 0 12px 12px 0;
-            transform-origin: left;
-            border-left: 2px solid var(--cobalt-primary);
-        }
-
-        /* Estilos de Apertura */
-        #relic-scene.open .relic-door.left {
-            transform: rotateY(-110deg) translateX(-10px);
-            z-index: 1;
-        }
-
-        #relic-scene.open .relic-door.right {
-            transform: rotateY(110deg) translateX(10px);
-            z-index: 1;
-        }
-
-        /* Símbolo Central Resplandeciente */
-        .symbol-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateZ(20px);
-            font-size: 3rem;
-            color: var(--gold-light);
-            text-shadow: 0 0 15px var(--gold-light), 0 0 30px var(--cobalt-glow);
-            z-index: 10;
             pointer-events: none;
-            transition: opacity 0.5s;
+            overflow: hidden;
+            border-radius: 8px;
         }
-        
-        #relic-scene.open .symbol-overlay { opacity: 0; }
 
-        /* Interior del Relicario (Texto Revelado) */
-        .relic-back {
-            width: 100%;
-            height: 100%;
+        /* Solapa de abajo y lados simulada con degradados geométricos elegantes */
+        .envelope-front-design::after {
+            content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            background-color: var(--bg-color);
-            border-radius: 12px;
-            border: 2px solid var(--cobalt-primary);
-            box-shadow: inset 0 0 50px rgba(0, 112, 255, 0.15);
-            z-index: 1;
-            padding: 40px;
-            transform: translateZ(-10px);
+            bottom: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(35deg, #070c1e 48%, transparent 48%),
+                        linear-gradient(-35deg, #070c1e 48%, transparent 48%);
+            border-top: 1px solid rgba(255,255,255,0.03);
+        }
+
+        /* SOLAPA SUPERIOR (Interactiva 3D) */
+        .flap {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: #0f1938;
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            transform-origin: top;
+            transition: transform 0.6s ease-out;
+            z-index: 6;
+        }
+
+        /* Sello de Corona central */
+        .seal {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #b59410, #d4af37);
+            border-radius: 50%;
+            z-index: 7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: opacity 0.4s ease;
+        }
+
+        /* --- LA CARTA OCULTA --- */
+        .letter {
+            position: absolute;
+            bottom: 5px;
+            left: 4%;
+            width: 92%;
+            height: 90%;
+            background-color: var(--paper-color);
+            border-radius: 4px;
+            padding: 25px 20px;
+            color: var(--text-color);
             overflow-y: auto;
-            opacity: 0;
-            transition: opacity 0.5s var(--transition-speed);
+            z-index: 3;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0.9;
         }
 
-        #relic-scene.open .relic-back { opacity: 1; }
-
-        /* Estilos de Texto del Relicario */
-        .relic-content {
-            font-family: var(--font-display);
-            font-size: 1.15rem;
-            line-height: 1.9;
-            color: var(--text-accent);
+        .letter-text {
+            font-size: 1rem;
+            line-height: 1.8;
             text-align: justify;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s 1s, transform 1s 1s;
+            font-family: 'Playfair Display', serif;
         }
 
-        #relic-scene.open .relic-content {
-            opacity: 1;
-            transform: translateY(0);
+        .letter-text p {
+            margin-bottom: 15px;
         }
 
-        .relic-content p {
-            margin-bottom: 20px;
-            opacity: 0;
-            animation: fadeInText 1s forwards;
+        /* Inicial elegante */
+        .letter-text p:first-of-type::first-letter {
+            font-family: 'Cinzel', serif;
+            font-size: 2.8rem;
+            float: left;
+            margin-right: 8px;
+            line-height: 1;
+            color: #0047AB;
+            font-weight: bold;
         }
-        
-        .relic-content p:nth-child(1) { animation-delay: 1.2s; }
-        .relic-content p:nth-child(2) { animation-delay: 1.8s; }
 
-        .relic-footer {
-            margin-top: 30px;
+        .letter-footer {
             text-align: center;
-            font-size: 2rem;
-            color: var(--text-main);
+            font-size: 1.5rem;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0,0,0,0.08);
+        }
+
+        /* --- CONTROL DE ANIMACIONES AL HACER CLIC (Abierto) --- */
+        .envelope-container.open .flap {
+            transform: rotateX(180deg);
+            z-index: 2; /* Pasa detrás */
+        }
+
+        .envelope-container.open .seal {
             opacity: 0;
-            animation: fadeInText 1s forwards;
-            animation-delay: 2.5s;
+            pointer-events: none;
         }
 
-        /* --- Animaciones --- */
-        @keyframes fadeInText {
-            to { opacity: 1; }
+        .envelope-container.open .letter {
+            transform: translateY(-65%) scale(1.05); /* Sube elegantemente sobre el sobre */
+            height: 140%; /* Se agranda para mejor lectura */
+            z-index: 20; /* Se pone al frente de todo */
+            opacity: 1;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
         }
 
-        @keyframes slowSpin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        @keyframes pulseSymbol {
-            0%, 100% { transform: translate(-50%, -50%) translateZ(20px) scale(1); opacity: 1; }
-            50% { transform: translate(-50%, -50%) translateZ(25px) scale(1.1); opacity: 0.8; }
-        }
-
-        /* --- Scrollbar Estilizado para el Relicario --- */
-        .relic-back::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .relic-back::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.01);
-        }
-
-        .relic-back::-webkit-scrollbar-thumb {
-            background: var(--cobalt-primary);
-            border-radius: 3px;
-        }
-
-        /* --- Adaptación para Móviles --- */
-        @media (max-width: 600px) {
-            #relic-scene { width: 340px; height: 280px; }
-            .relic-back { padding: 25px; }
-            .relic-content { font-size: 0.95rem; line-height: 1.8; }
-            .symbol-overlay { font-size: 2.2rem; }
-        }
+        /* Scrollbar interno discreto */
+        .letter::-webkit-scrollbar { width: 4px; }
+        .letter::-webkit-scrollbar-thumb { background: #c7bfae; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="custom-cursor"></div>
+    <button id="music-btn" onclick="toggleMusic()">🎵 ACTIVAR MÚSICA</button>
+    <audio id="bg-music" src="mysong.mp3" loop></audio>
 
-    <canvas id="bg-canvas"></canvas>
+    <canvas id="fireworksCanvas"></canvas>
 
-    <button id="music-btn" onclick="toggleAudio()">
-        <span id="audio-icon">▶</span> <span id="audio-text">Reproducir</span>
-    </button>
-    <audio id="mysong" src="mysong.mp3" loop></audio>
-
-    <div id="relic-scene">
-        <div class="relic-wrapper">
+    <div class="envelope-container" id="mainCard" onclick="openBox()">
+        <div class="envelope">
             
-            <div class="relic-front" onclick="openRelic()">
-                <div class="symbol-overlay" style="animation: pulseSymbol 2.5s infinite;">👑</div>
-                <div class="relic-door left"></div>
-                <div class="relic-door right"></div>
-            </div>
+            <div class="flap"></div>
+            <div class="seal">👑</div>
 
-            <div class="relic-back">
-                <div class="relic-content">
+            <div class="letter">
+                <div class="letter-text">
                     <p>Hace tiempo una bolita amarilla pachona entro a la vida de una bolita café, sin saberlo las bolitas se acercaron y un tiempo se alejaron actualmente esas dos bolitas están juntas son lo mejor de los dos mundos de la obscuridad y la luz...</p>
                     <p>La bolita amarilla dice no sentir sin embargo la bolita amarilla ve y sabe el esfuerzo que hace su pareja todos los días, lo mucho que la bolita café está orgulloso de la bolita amarilla y aunque aveces es difícil están ahí siempre juntos contra todos siendo hermosos, teniendo bellos corazones siendo los reyes de los corazones.</p>
                 </div>
-                <div class="relic-footer">💛🤎</div>
+                <div class="letter-footer">👑💛 🤎👑</div>
             </div>
+
+            <div class="envelope-front-design"></div>
 
         </div>
     </div>
 
     <script>
-        // --- Cursor Personalizado ---
-        const cursor = document.getElementById('custom-cursor');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
+        // --- LOGICA DE AUDIO ---
+        const audio = document.getElementById('bg-music');
+        const btn = document.getElementById('music-btn');
 
-        // --- Lógica del Relicario ---
-        function openRelic() {
-            const scene = document.getElementById('relic-scene');
-            scene.classList.toggle('open');
-            // Intentar reproducir audio al interactuar (evitar bloqueo)
-            const audio = document.getElementById('mysong');
-            if (audio.paused) toggleAudio();
-        }
-
-        // --- Lógica de Audio ---
-        function toggleAudio() {
-            const audio = document.getElementById('mysong');
-            const icon = document.getElementById('audio-icon');
-            const text = document.getElementById('audio-text');
+        function toggleMusic() {
             if (audio.paused) {
-                audio.play();
-                icon.innerText = "⏸";
-                text.innerText = "Pausar";
+                audio.play().catch(err => console.log("Bloqueado"));
+                btn.innerText = "⏸ PAUSAR MÚSICA";
             } else {
                 audio.pause();
-                icon.innerText = "▶";
-                text.innerText = "Reproducir";
+                btn.innerText = "🎵 REPRODUCIR";
             }
         }
 
-        // --- Canva de Fondo (Partículas Reactivas) ---
-        const canvas = document.getElementById('bg-canvas');
+        // --- INTERACCIÓN DE APERTURA ---
+        function openBox() {
+            const card = document.getElementById('mainCard');
+            card.classList.toggle('open');
+            if (audio.paused) { toggleMusic(); }
+        }
+
+        // --- MOTOR DE FUEGOS ARTIFICIALES AZUL COBALTO ---
+        const canvas = document.getElementById('fireworksCanvas');
         const ctx = canvas.getContext('2d');
 
-        function resizeCanvas() {
+        function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        let mouseX = canvas.width / 2;
-        let mouseY = canvas.height / 2;
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
+        window.addEventListener('resize', resize);
+        resize();
 
         class Particle {
-            constructor() {
-                this.x = mouseX;
-                this.y = mouseY;
-                this.speedX = Math.random() * 6 - 3;
-                this.speedY = Math.random() * -8 - 2;
-                this.size = Math.random() * 4 + 1;
-                this.color = Math.random() > 0.3 ? '#1e90ff' : '#ffffff';
-                this.opacity = 1;
-                this.decay = Math.random() * 0.02 + 0.01;
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.radius = Math.random() * 2 + 0.8;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 5 + 1;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.gravity = 0.06;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.015 + 0.008;
             }
-
             draw() {
                 ctx.save();
-                ctx.globalAlpha = this.opacity;
+                ctx.globalAlpha = this.alpha;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
-                ctx.shadowBlur = 15;
+                ctx.shadowBlur = 8;
                 ctx.shadowColor = this.color;
                 ctx.fill();
                 ctx.restore();
             }
-
             update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.speedY += 0.1; // Gravedad suave
-                this.size *= 0.98;
-                this.opacity -= this.decay;
+                this.vx *= 0.98;
+                this.vy *= 0.98;
+                this.x += this.vx;
+                this.y += this.vy + this.gravity;
+                this.alpha -= this.decay;
             }
         }
 
-        let particles = [];
-
-        function loop() {
-            ctx.fillStyle = 'rgba(2, 2, 5, 0.15)'; // Estela suave
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            if (particles.length < 60) {
-                particles.push(new Particle());
+        class Firework {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                this.targetY = Math.random() * (canvas.height * 0.5) + (canvas.height * 0.1);
+                this.speed = Math.random() * 4 + 7;
+                this.exploded = false;
+                this.particles = [];
+                this.colors = ['#0047AB', '#1e90ff', '#4169E1', '#ffffff', '#0a1128'];
             }
-
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                particles[i].draw();
-                if (particles[i].opacity <= 0 || particles[i].size <= 0.1) {
-                    particles.splice(i, 1);
+            update() {
+                if (!this.exploded) {
+                    this.y -= this.speed;
+                    if (this.y <= this.targetY) {
+                        this.exploded = true;
+                        for (let i = 0; i < 70; i++) {
+                            this.particles.push(new Particle(this.x, this.y, this.colors[Math.floor(Math.random() * this.colors.length)]));
+                        }
+                    }
+                } else {
+                    for (let i = this.particles.length - 1; i >= 0; i--) {
+                        this.particles[i].update();
+                        if (this.particles[i].alpha <= 0) this.particles.splice(i, 1);
+                    }
                 }
             }
-            requestAnimationFrame(loop);
+            draw() {
+                if (!this.exploded) {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                    ctx.fillStyle = '#4169E1';
+                    ctx.fill();
+                } else {
+                    this.particles.forEach(p => p.draw());
+                }
+            }
         }
 
-        loop();
+        let list = [];
+        function run() {
+            ctx.fillStyle = 'rgba(3, 4, 8, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (Math.random() < 0.03 && list.length < 5) {
+                list.push(new Firework());
+            }
+
+            for (let i = list.length - 1; i >= 0; i--) {
+                list[i].update();
+                list[i].draw();
+                if (list[i].exploded && list[i].particles.length === 0) list.splice(i, 1);
+            }
+            requestAnimationFrame(run);
+        }
+        run();
     </script>
 </body>
 </html>
