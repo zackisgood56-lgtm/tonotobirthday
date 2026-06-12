@@ -41,7 +41,7 @@
     }  
 
     @media (pointer: fine) {  
-        body, #game-container, .relic-box, #music-btn, #foca-dvd { cursor: none; }  
+        body, #game-container, .relic-box, #music-btn, #foca-dvd, #glitch-heart { cursor: none; }  
     }  
 
     /* --- Fondo de Partículas --- */  
@@ -110,6 +110,19 @@
         text-shadow: 0 0 8px var(--cobalt-glow);  
     }  
 
+    /* --- MINI JUEGO SECRETO: CORAZÓN GLITCH --- */  
+    #glitch-heart {  
+        position: fixed;  
+        font-size: 3.5rem;  
+        z-index: 150;  
+        display: none;  
+        user-select: none;  
+        touch-action: none;  
+        filter: drop-shadow(0 0 15px #ff0055);  
+        cursor: pointer;  
+        animation: heartPulse 0.6s infinite alternate;  
+    }  
+
     /* --- RELICARIO MODERNO GLASSMORPHISM --- */  
     #relic-scene {  
         width: 450px;  
@@ -120,9 +133,7 @@
         animation: floatAnimation 4s ease-in-out infinite;  
     }  
 
-    #relic-scene.open {  
-        animation-play-state: paused;  
-    }  
+    #relic-scene.open { animation-play-state: paused; }  
 
     .relic-box {  
         width: 100%;  
@@ -132,11 +143,9 @@
         -webkit-backdrop-filter: blur(25px);  
         border: 2px solid rgba(30, 144, 255, 0.3);  
         border-radius: 24px;  
-        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8),   
-                    inset 0 0 40px rgba(0, 71, 171, 0.25);  
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(0, 71, 171, 0.25);  
         position: relative;  
         overflow: hidden;  
-        transition: border-color 0.5s ease;  
     }  
 
     .door-panel {  
@@ -149,7 +158,6 @@
         transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);  
         z-index: 5;  
     }  
-      
     .door-panel.left { left: 0; border-right: 2px solid var(--cobalt-primary); border-radius: 22px 0 0 22px; }  
     .door-panel.right { right: 0; border-left: 2px solid var(--cobalt-primary); border-radius: 0 22px 22px 0; }  
 
@@ -163,7 +171,6 @@
         transform: translate(-50%, -50%);  
         font-size: 3.5rem;  
         z-index: 10;  
-        transition: all 0.5s ease;  
         text-shadow: 0 0 20px var(--gold-light), 0 0 40px var(--cobalt-glow);  
     }  
     #relic-scene.open .center-lock { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0); }  
@@ -180,16 +187,9 @@
         transition: opacity 0.8s ease 0.6s, transform 0.8s ease 0.6s;  
         z-index: 2;  
     }  
-      
     #relic-scene.open .inner-card { opacity: 1; transform: scale(1); }  
 
-    .relic-content {  
-        font-family: var(--font-display);  
-        font-size: 1.05rem;  
-        line-height: 1.8;  
-        color: var(--text-accent);  
-        text-align: justify;  
-    }  
+    .relic-content { font-family: var(--font-display); font-size: 1.05rem; line-height: 1.8; color: var(--text-accent); text-align: justify; }  
     .relic-content p { margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }  
     .relic-footer { margin-top: auto; padding-top: 20px; text-align: center; font-size: 2.2rem; }  
 
@@ -206,17 +206,15 @@
     }  
 
     /* --- EFECTO GLITCH DE PANTALLA --- */  
-    .glitch-active {  
-        animation: screenGlitch 0.15s steps(2) infinite;  
-    }  
+    .glitch-active { animation: screenGlitch 0.12s steps(2) infinite; }  
 
-    /* --- FOTO POLAROID REVELADA --- */  
-    #polaroid-container {  
+    /* --- CONTENEDOR COMÚN DE POLAROIDS --- */  
+    .polaroid-box {  
         position: fixed;  
         z-index: 200;  
         background: #ffffff;  
         padding: 16px 16px 28px 16px;  
-        box-shadow: 0 35px 80px rgba(0,0,0,0.85), 0 0 40px rgba(30, 144, 255, 0.3);  
+        box-shadow: 0 35px 80px rgba(0,0,0,0.85), 0 0 40px rgba(30, 144, 255, 0.2);  
         border-radius: 4px;  
         display: none;  
         flex-direction: column;  
@@ -227,44 +225,23 @@
         width: 85%;  
     }  
 
-    #polaroid-container img {  
-        width: 100%;  
-        height: auto;  
-        aspect-ratio: 1 / 1;  
-        object-fit: cover;  
-        border: 1px solid #ddd;  
-        background: #050505;  
-    }  
+    .polaroid-box img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border: 1px solid #ddd; background: #050505; }  
+    .polaroid-box .caption { font-family: var(--font-display); font-style: italic; color: #1a1a24; font-size: 1.15rem; margin-top: 18px; text-align: center; font-weight: 600; }  
 
-    #polaroid-container .caption {  
-        font-family: var(--font-display);  
-        font-style: italic;  
-        color: #1a1a24;  
-        font-size: 1.15rem;  
-        margin-top: 18px;  
-        text-align: center;  
-        font-weight: 600;  
-    }  
-
-    /* --- Animaciones Keyframes --- */  
+    /* --- Animaciones --- */  
     @keyframes floatAnimation { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }  
     @keyframes spinFoca { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }  
     @keyframes pulseSymbol { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } }  
+    @keyframes heartPulse { from { transform: scale(1); filter: drop-shadow(0 0 10px #ff0055); } to { transform: scale(1.2); filter: drop-shadow(0 0 25px #ff3377) brightness(1.2); } }  
     
     @keyframes screenGlitch {  
-        0% { transform: translate(2px, 1px) skew(2deg); filter: hue-rotate(90deg) contrast(1.5); }  
-        50% { transform: translate(-1px, -2px) skew(-3deg); filter: hue-rotate(180deg) invert(1); }  
-        100% { transform: translate(1px, 2px) skew(0deg); filter: hue-rotate(0deg); }  
+        0% { transform: translate(3px, 2px) skew(3deg); filter: hue-rotate(45deg) contrast(1.3); }  
+        50% { transform: translate(-2px, -3px) skew(-2deg); filter: hue-rotate(180deg) invert(0.9); }  
+        100% { transform: translate(1px, 3px) skew(1deg); filter: hue-rotate(320deg); }  
     }  
 
     .inner-card::-webkit-scrollbar { width: 4px; }  
     .inner-card::-webkit-scrollbar-thumb { background: rgba(30, 144, 255, 0.4); border-radius: 10px; }  
-
-    @media (max-width: 600px) {  
-        #relic-scene { width: 92%; max-width: 360px; height: 460px; }  
-        .inner-card { padding: 30px 20px; }  
-        .relic-content { font-size: 0.98rem; line-height: 1.65; }  
-    }  
 </style>  
 </head>  
 <body>  
@@ -281,6 +258,8 @@
     <div id="score">0</div>  
 </div>  
 
+<div id="glitch-heart" onclick="catchHeart(event)" ontouchstart="catchHeart(event)">💝</div>  
+
 <canvas id="foca-dvd" onclick="catchFoca(event)" ontouchstart="catchFoca(event)"></canvas>  
 
 <div id="relic-scene">  
@@ -292,7 +271,7 @@
         <div class="inner-card">  
             <div class="relic-content">  
                 <p>Hace tiempo una bolita amarilla pachona entró a la vida de una bolita café, sin saberlo las bolitas se acercaron y un tiempo se alejaron... Actualmente esas dos bolitas están juntas, son lo mejor de los dos mundos de la oscuridad y la luz. Ni el Sincorazón más poderoso de Kingdom Hearts podría apagar la brillante conexión de nuestros mundos.</p>  
-                <p>La bolita amarilla dice no sentir, sin embargo, la bolita amarilla ve y sabe el esfuerzo que hace su pareja todos los días, lo mucho que la bolita café está orgullosa de ella. Y aunque a veces es difícil, este amor es "The Greatest Show", el mejor espectáculo del planeta. Estamos aquí siempre juntos contra todos, reescribiendo las estrellas paso a paso.</p>  
+                <p>La bolita amarilla dice no sentir, sin embargo, la bolita amarilla ve y sabe el esfuerzo que hace su pareja todos los días, lo mucho que la bolita café está orgullosa de ella. And although it is hard sometimes, this love is "The Greatest Show", el mejor espectáculo del planeta. Estamos aquí siempre juntos contra todos, reescribiendo las estrellas paso a paso.</p>  
                 <p>Siendo hermosos, teniendo bellos corazones y siendo legítimamente los reyes de los corazones. No importa cuán caótico parezca el mañana exterior, hagamos que todo el ruido se detenga por completo, porque somos absolutamente "Beautiful Now", una hermosa realidad en este instante eterno.</p>  
             </div>  
             <div class="relic-footer">👑✨💛🤎</div>  
@@ -300,13 +279,20 @@
     </div>  
 </div>  
 
-<div id="polaroid-container">  
+<div id="polaroid-container" class="polaroid-box">  
     <img src="tonotos.jpg" alt="Tonotos">  
     <div class="caption">te amo feliz cumpleaños tonoto :3</div>  
 </div>  
 
+<div id="polaroid-secret" class="polaroid-box" style="box-shadow: 0 35px 80px rgba(0,0,0,0.85), 0 0 40px rgba(255, 0, 85, 0.4);">  
+    <img src="iloveyou.jpg" alt="I Love You">  
+    <div class="caption" style="color: #ff0055;">te amo feliz cumpleaños tonoto :3</div>  
+</div>  
+
 <script>  
-    // --- Música ---  
+    let failCount = 0; // Registro de caídas  
+
+    // --- Audio ---  
     function toggleAudio(e) {  
         if(e) e.stopPropagation();  
         const audio = document.getElementById('mysong');  
@@ -314,130 +300,113 @@
         const text = document.getElementById('audio-text');  
         if (audio.paused) {  
             audio.play().catch(() => {});  
-            icon.innerText = "⏸";  
-            text.innerText = "Pausar";  
+            icon.innerText = "⏸"; text.innerText = "Pausar";  
         } else {  
             audio.pause();  
-            icon.innerText = "▶";  
-            text.innerText = "Reproducir";  
+            icon.innerText = "▶"; text.innerText = "Reproducir";  
         }  
     }  
 
-    // --- Abrir Relicario e iniciar Foca DVD ---  
+    // --- Relicario ---  
     function openRelic() {  
         document.getElementById('relic-scene').classList.add('open');  
-        setTimeout(initFocaDVD, 1500); // Aparece sutilmente tras abrir  
+        setTimeout(initFocaDVD, 1500);  
     }  
 
-    // --- Partículas de Fondo ---  
-    const canvasBg = document.getElementById('bg-canvas');  
-    const ctxBg = canvasBg.getContext('2d');  
+    // --- Partículas Genéricas ---  
+    const canvasBg = document.getElementById('bg-canvas'); const ctxBg = canvasBg.getContext('2d');  
     function resizeCanvas() { canvasBg.width = window.innerWidth; canvasBg.height = window.innerHeight; }  
-    window.addEventListener('resize', resizeCanvas);  
-    resizeCanvas();  
-
+    window.addEventListener('resize', resizeCanvas); resizeCanvas();  
     let mouseX = window.innerWidth/2, mouseY = window.innerHeight/2;  
     document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });  
-    document.addEventListener('touchmove', e => { if(e.touches.length > 0) { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; } }, {passive:true});  
 
     class Particle {  
         constructor() {  
             this.x = mouseX; this.y = mouseY;  
             this.speedX = Math.random() * 5 - 2.5; this.speedY = Math.random() * -7 - 2;  
-            this.size = Math.random() * 3.5 + 1;  
-            this.color = Math.random() > 0.35 ? '#1e90ff' : '#ffffff';  
+            this.size = Math.random() * 3.5 + 1; this.color = Math.random() > 0.35 ? '#1e90ff' : '#ffffff';  
             this.opacity = 1; this.decay = Math.random() * 0.012 + 0.006;  
         }  
-        draw() {  
-            ctxBg.save(); ctxBg.globalAlpha = this.opacity; ctxBg.beginPath();  
-            ctxBg.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctxBg.fillStyle = this.color;  
-            ctxBg.shadowBlur = 12; ctxBg.shadowColor = this.color; ctxBg.fill(); ctxBg.restore();  
-        }  
-        update() { this.x += this.speedX; this.y += this.speedY; this.speedY += 0.07; this.size *= 0.98; this.opacity -= this.decay; }  
+        draw() { ctxBg.save(); ctxBg.globalAlpha = this.opacity; ctxBg.beginPath(); ctxBg.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctxBg.fillStyle = this.color; ctxBg.fill(); ctxBg.restore(); }  
+        update() { this.x += this.speedX; this.y += this.speedY; this.opacity -= this.decay; }  
     }  
     let particles = [];  
     function loopBg() {  
         ctxBg.fillStyle = 'rgba(2, 2, 8, 0.2)'; ctxBg.fillRect(0, 0, canvasBg.width, canvasBg.height);  
-        if (particles.length < 50) particles.push(new Particle());  
+        if (particles.length < 45) particles.push(new Particle());  
         for (let i = particles.length - 1; i >= 0; i--) {  
-            particles[i].update(); particles[i].draw();  
-            if (particles[i].opacity <= 0 || particles[i].size <= 0.1) particles.splice(i, 1);  
+            particles[i].update(); particles[i].draw(); if (particles[i].opacity <= 0) particles.splice(i, 1);  
         }  
         requestAnimationFrame(loopBg);  
     }  
     loopBg();  
 
-    // --- SISTEMA FOCA BOUNCING DVD ---  
-    const fvd = document.getElementById('foca-dvd');  
-    const fctx = fvd.getContext('2d');  
-    fvd.width = 75; fvd.height = 75;  
-
-    // Renderizar foca dentro de su propio canvas flotante  
+    // --- LÓGICA DE FOCA DVD ---  
+    const fvd = document.getElementById('foca-dvd'); const fctx = fvd.getContext('2d'); fvd.width = 75; fvd.height = 75;  
     function drawDVDFoca() {  
-        fctx.clearRect(0,0,75,75);  
         fctx.fillStyle = '#FFD700'; fctx.beginPath(); fctx.ellipse(37, 42, 26, 18, 0, 0, Math.PI*2); fctx.fill();  
-        fctx.beginPath(); fctx.arc(55, 30, 11, 0, Math.PI*2); fctx.fill();  
-        fctx.beginPath(); fctx.moveTo(15, 42); fctx.lineTo(5, 32); fctx.lineTo(5, 52); fctx.closePath(); fctx.fill();  
-        fctx.fillStyle = '#000'; fctx.beginPath(); fctx.arc(57, 28, 2, 0, Math.PI*2); fctx.fill();  
+        fctx.beginPath(); fctx.arc(55, 30, 11, 0, Math.PI*2); fctx.fill(); fctx.fillStyle = '#000'; fctx.beginPath(); fctx.arc(57, 28, 2, 0, Math.PI*2); fctx.fill();  
     }  
     drawDVDFoca();  
-
-    let fdx = 2.5, fdy = 2.5, fpx = 20, fpy = 20;  
-    let dvdInterval = null;  
-    let isCaught = false;  
-
+    let fdx = 2.5, fdy = 2.5, fpx = 20, fpy = 20, dvdInterval = null, isCaught = false;  
     function initFocaDVD() {  
         fvd.style.display = 'block';  
         dvdInterval = setInterval(() => {  
-            if(isCaught) return;  
-            fpx += fdx; fpy += fdy;  
-            
-            // Rebotar bordes de pantalla de forma estable  
-            if(fpx <= 0 || fpx >= window.innerWidth - 75) { fdx *= -1; accelerateDVD(); }  
-            if(fpy <= 0 || fpy >= window.innerHeight - 75) { fdy *= -1; accelerateDVD(); }  
-
-            fvd.style.left = fpx + 'px';  
-            fvd.style.top = fpy + 'px';  
+            if(isCaught) return; fpx += fdx; fpy += fdy;  
+            if(fpx <= 0 || fpx >= window.innerWidth - 75) { fdx *= -1; fdx += (fdx > 0 ? 0.3 : -0.3); }  
+            if(fpy <= 0 || fpy >= window.innerHeight - 75) { fdy *= -1; fdy += (fdy > 0 ? 0.3 : -0.3); }  
+            fvd.style.left = fpx + 'px'; fvd.style.top = fpy + 'px';  
         }, 16);  
     }  
-
-    function accelerateDVD() {  
-        fdx += (fdx > 0 ? 0.35 : -0.35);  
-        fdy += (fdy > 0 ? 0.35 : -0.35);  
-    }  
-
     function catchFoca(e) {  
-        if(e) e.stopPropagation();  
-        if(isCaught) return;  
-        isCaught = true;  
-        clearInterval(dvdInterval);  
-        fvd.style.display = 'none';  
-
-        // Ocultar la carta para enfocar la Polaroid  
-        document.getElementById('relic-scene').style.display = 'none';  
-
-        // Lanzar efecto glitch  
-        document.body.classList.add('glitch-active');  
-
+        if(e) e.stopPropagation(); if(isCaught) return; isCaught = true; clearInterval(dvdInterval); fvd.style.display = 'none';  
+        document.getElementById('relic-scene').style.display = 'none'; document.body.classList.add('glitch-active');  
         setTimeout(() => {  
             document.body.classList.remove('glitch-active');  
-            const polaroid = document.getElementById('polaroid-container');  
-            polaroid.style.display = 'flex';  
-            setTimeout(() => {  
-                polaroid.style.transform = 'scale(1) rotate(-4deg)';  
-            }, 50);  
+            const pol = document.getElementById('polaroid-container'); pol.style.display = 'flex';  
+            setTimeout(() => { pol.style.transform = 'scale(1) rotate(-4deg)'; }, 50);  
         }, 800);  
     }  
 
-    // --- MINI-JUEGO CORREDOR ---  
-    const gameCanvas = document.getElementById('game-canvas');  
-    const gctx = gameCanvas.getContext('2d');  
-    function resizeGame() {  
-        gameCanvas.width = document.getElementById('game-container').clientWidth;  
-        gameCanvas.height = document.getElementById('game-container').clientHeight;  
+    // --- ACTIVACIÓN RUTA OCULTA (FALLA 4) ---  
+    let heartInterval = null;  
+    function triggerSecretGlitchGame() {  
+        document.getElementById('game-container').style.display = 'none';  
+        document.body.classList.add('glitch-active'); // Primer glitch violento  
+          
+        setTimeout(() => {  
+            document.body.classList.remove('glitch-active');  
+            const heart = document.getElementById('glitch-heart');  
+            heart.style.display = 'block';  
+            
+            // Lógica para mover el corazón aleatoriamente y rápido  
+            heartInterval = setInterval(() => {  
+                const rx = Math.random() * (window.innerWidth - 80);  
+                const ry = Math.random() * (window.innerHeight - 80);  
+                heart.style.left = rx + 'px';  
+                heart.style.top = ry + 'px';  
+            }, 550); // Cambia de lugar velozmente  
+        }, 1000);  
     }  
-    window.addEventListener('resize', resizeGame);  
-    resizeGame();  
+
+    function catchHeart(e) {  
+        if(e) e.stopPropagation();  
+        clearInterval(heartInterval);  
+        document.getElementById('glitch-heart').style.display = 'none';  
+        document.body.classList.add('glitch-active'); // Segundo glitch terminal  
+
+        setTimeout(() => {  
+            document.body.classList.remove('glitch-active');  
+            const secretPol = document.getElementById('polaroid-secret');  
+            secretPol.style.display = 'flex';  
+            setTimeout(() => { secretPol.style.transform = 'scale(1) rotate(5deg)'; }, 50);  
+        }, 900);  
+    }  
+
+    // --- MINI JUEGO PRINCIPAL DINO FOCAS ---  
+    const gameCanvas = document.getElementById('game-canvas'); const gctx = gameCanvas.getContext('2d');  
+    function resizeGame() { gameCanvas.width = document.getElementById('game-container').clientWidth; gameCanvas.height = document.getElementById('game-container').clientHeight; }  
+    window.addEventListener('resize', resizeGame); resizeGame();  
 
     let focaYellow = {x: 60, y: gameCanvas.height-35, width: 34, height: 24, vy: 0, jumping: false, color: '#FFD700', eyeColor: '#000'};  
     let focaBrown = {x: 110, y: gameCanvas.height-35, width: 34, height: 24, vy: 0, jumping: false, color: '#8B4513', eyeColor: '#FFF'};  
@@ -445,16 +414,9 @@
 
     function drawFoca(f) {  
         gctx.save(); gctx.fillStyle = f.color; gctx.beginPath(); gctx.ellipse(f.x + 17, f.y + 14, 16, 10, 0, 0, Math.PI * 2); gctx.fill();  
-        gctx.beginPath(); gctx.arc(f.x + 28, f.y + 8, 7, 0, Math.PI * 2); gctx.fill(); gctx.beginPath(); gctx.moveTo(f.x + 2, f.y + 14);  
-        gctx.lineTo(f.x - 4, f.y + 8); gctx.lineTo(f.x - 4, f.y + 20); gctx.closePath(); gctx.fill(); gctx.fillStyle = f.eyeColor;  
-        gctx.beginPath(); gctx.arc(f.x + 29, f.y + 7, 1.5, 0, Math.PI * 2); gctx.fill(); gctx.restore();  
+        gctx.beginPath(); gctx.arc(f.x + 28, f.y + 8, 7, 0, Math.PI * 2); gctx.fill(); gctx.fillStyle = f.eyeColor; gctx.beginPath(); gctx.arc(f.x + 29, f.y + 7, 1.5, 0, Math.PI * 2); gctx.fill(); gctx.restore();  
     }  
-
-    function drawIceberg(obs) {  
-        gctx.save(); gctx.fillStyle = '#1e90ff'; gctx.strokeStyle = '#ffffff'; gctx.lineWidth = 2; gctx.beginPath();  
-        gctx.moveTo(obs.x, obs.y + obs.height); gctx.lineTo(obs.x + obs.width / 2, obs.y); gctx.lineTo(obs.x + obs.width, obs.y + obs.height);  
-        gctx.closePath(); gctx.fill(); gctx.stroke(); gctx.restore();  
-    }  
+    function drawIceberg(obs) { gctx.save(); gctx.fillStyle = '#1e90ff'; gctx.strokeStyle = '#ffffff'; gctx.beginPath(); gctx.moveTo(obs.x, obs.y + obs.height); gctx.lineTo(obs.x + obs.width / 2, obs.y); gctx.lineTo(obs.x + obs.width, obs.y + obs.height); gctx.closePath(); gctx.fill(); gctx.stroke(); gctx.restore(); }  
 
     function jump() {  
         if(gameOver) { resetGame(); return; }  
@@ -488,7 +450,14 @@
                 let oHit = { x: obs.x + 3, y: obs.y + 4, width: obs.width - 6, height: obs.height - 4 };  
                 if (fHit.x < oHit.x + oHit.width && fHit.x + fHit.width > oHit.x && fHit.y < oHit.y + oHit.height && fHit.y + fHit.height > oHit.y) {  
                     gameOver = true; cancelAnimationFrame(animationId); animationId = null;  
-                    setTimeout(() => { alert("¡Chocaron! Pulsa la pantalla para reiniciar."); }, 10);  
+                    failCount++;  
+                    setTimeout(() => {  
+                        if(failCount >= 4) {  
+                            triggerSecretGlitchGame();  
+                        } else {  
+                            alert(`¡Chocaron! (Fallas: ${failCount}/4). Pulsa la pantalla para reintentar.`);  
+                        }  
+                    }, 20);  
                 }  
             });  
             if(obs.x + obs.width < 0) obstacles.splice(i, 1);  
