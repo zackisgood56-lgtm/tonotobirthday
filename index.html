@@ -3,230 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feliz Cumpleaños Mi Amor</title>
+    <title>Para el Rey de los Corazones</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-color: #0a0b10;
-            --cobalt-blue: #0047AB;
-            --cobalt-glow: #4169E1;
-            --envelope-color: #1e2230;
-            --envelope-flap: #282e42;
-            --letter-bg: #fffdf6;
+            --bg-dark: #050609;
+            --cobalt-deep: #002e6e;
+            --cobalt-light: #4169e1;
+            --gold-subtle: #b59410;
+            --env-body: #161922;
+            --env-flap: #1f2330;
+            --env-inside: #0d0f14;
+            --letter-paper: #fffdf6;
+            --text-dark: #1a1a1a;
+            --transition-smooth: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: var(--bg-color);
-            overflow: hidden;
-            font-family: 'Georgia', serif;
+            background-color: var(--bg-dark);
             height: 100vh;
+            overflow: hidden;
+            font-family: 'Playfair Display', serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1000px;
+            perspective: 2000px; /* Profundidad 3D para el sobre */
+            color: white;
         }
 
-        /* Lienzo de Fuegos Artificiales */
+        /* --- 1. PANTALLA DE ENTRADA (Música y Suspense) --- */
+        #intro-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.5s ease;
+            cursor: pointer;
+        }
+        
+        #intro-overlay.fade-out { opacity: 0; pointer-events: none; }
+
+        .intro-text {
+            font-family: 'Cinzel', serif;
+            color: white;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            text-align: center;
+            line-height: 1.6;
+            animation: textFocus 3s ease-out;
+        }
+        .intro-hint {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #444;
+            letter-spacing: 1px;
+        }
+
+        /* --- 2. CANVA DE FUEGOS ARTIFICIALES AVANZADOS --- */
         canvas {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1;
             pointer-events: none;
         }
 
-        /* Botón de Música Inicial (Requerido por navegadores) */
-        #music-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-            background: rgba(0, 71, 167, 0.6);
-            color: white;
-            border: 1px solid var(--cobalt-glow);
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-        #music-btn:hover {
-            background: var(--cobalt-blue);
-            box-shadow: 0 0 15px var(--cobalt-glow);
-        }
-
-        /* Contenedor del Sobre */
-        .envelope-wrapper {
+        /* --- 3. EL SOBRE EN 3D --- */
+        #scene {
             position: relative;
             width: 450px;
             height: 300px;
-            background-color: var(--envelope-color);
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            cursor: pointer;
             z-index: 10;
-            transition: transform 0.5s ease;
+            transform-style: preserve-3d;
+            transition: transform 1s ease;
         }
 
-        /* Cara del sobre (triángulos visuales) */
-        .envelope-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            z-index: 4;
-            background: linear-gradient(30deg, rgba(20,24,35,0.9) 45%, transparent 45%),
-                        linear-gradient(-30deg, rgba(20,24,35,0.9) 45%, transparent 45%);
+        /* Interacción al tocar */
+        #scene.open {
+            transform: rotateX(15deg) translateY(60px);
         }
 
-        .envelope-wrapper::after {
-            content: '';
+        .envelope {
             position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            z-index: 4;
-            background: linear-gradient(150deg, transparent 50%, rgba(15,18,27,0.8) 50%),
-                        linear-gradient(-150deg, transparent 50%, rgba(15,18,27,0.8) 50%);
-            border-radius: 0 0 8px 8px;
-        }
-
-        /* Solapa del Sobre */
-        .flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--envelope-flap);
-            clip-path: polygon(0 0, 50% 50%, 100% 0);
-            transform-origin: top;
-            transition: transform 0.4s ease 0.2s, z-index 0.2s ease 0.4s;
-            z-index: 5;
-        }
-
-        /* La Carta Secreta */
-        .letter {
-            position: absolute;
-            bottom: 10px;
-            left: 5%;
-            width: 90%;
-            height: 90%;
-            background: var(--letter-bg);
+            width: 100%; height: 100%;
+            background-color: var(--env-body);
             border-radius: 4px;
-            padding: 30px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s, z-index 0.1s ease 0.4s;
-            z-index: 3;
-            overflow-y: auto;
-            color: #2c2c2c;
-            line-height: 1.8;
-            font-size: 1.05rem;
-            text-align: justify;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+            transform-style: preserve-3d;
+            cursor: pointer;
         }
 
-        .letter::-webkit-scrollbar {
-            width: 5px;
-        }
-        .letter::-webkit-scrollbar-thumb {
-            background: #d1c7bd;
-            border-radius: 10px;
-        }
-
-        /* Firmas y detalles de la carta */
-        .letter p {
-            margin-bottom: 15px;
-            text-indent: 20px;
+        /* Frente del sobre (construido con pseudo-elementos para efecto 3D) */
+        .envelope-front {
+            position: absolute;
+            width: 100%; height: 100%;
+            z-index: 5;
+            transform-style: preserve-3d;
         }
         
-        .letter-heart {
-            text-align: center;
-            font-size: 1.5rem;
-            color: #c94c4c;
-            margin-top: 20px;
-            animation: pulse 1.5s infinite;
+        /* Solapa de apertura */
+        .flap {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--env-flap);
+            clip-path: polygon(0 0, 50% 50%, 100% 0);
+            transform-origin: top;
+            transition: var(--transition-smooth);
+            z-index: 10;
+            backface-visibility: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* ESTADOS DE ANIMACIÓN AL ABRIR */
-        .envelope-wrapper.open .flap {
-            transform: rotateX(180deg);
+        /* Interior del sobre */
+        .envelope-inside {
+            position: absolute;
+            top: 5px; left: 5px;
+            width: calc(100% - 10px);
+            height: calc(100% - 10px);
+            background-color: var(--env-inside);
+            border-radius: 2px;
+            z-index: 1;
+        }
+
+        /* Parte inferior del frente del sobre */
+        .pocket {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 60%;
+            background-color: var(--env-body);
+            clip-path: polygon(0 0, 50% 100%, 100% 0, 100% 100%, 0 100%);
+            z-index: 6;
+            border-radius: 0 0 4px 4px;
+        }
+
+        /* --- 4. LA CARTA AVANZADA (Efecto Acordeón) --- */
+        .letter-container {
+            position: absolute;
+            bottom: 10px; left: 10px;
+            width: calc(100% - 20px);
+            height: 120%; /* Altura final plegada */
             z-index: 2;
-            transition: transform 0.4s ease, z-index 0.2s ease 0.1s;
+            transition: var(--transition-smooth);
+            transition-delay: 0.2s;
+            transform: translateY(0px) rotateX(0deg); /* Plegada dentro */
+            transform-origin: bottom center;
+            transform-style: preserve-3d;
         }
 
-        .envelope-wrapper.open .letter {
-            transform: translateY(-70%) scale(1.05);
+        .letter-paper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--letter-paper);
+            border-radius: 2px;
+            padding: 40px;
+            color: var(--text-dark);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            transform: translateZ(1px);
+        }
+
+        /* --- ESTADOS DE LA ANIMACIÓN AVANZADA --- */
+        /* Al abrir: 1. Se abre la solapa, 2. Sube la carta, 3. Se "despliega" */
+        #scene.open .flap {
+            transform: rotateX(180deg);
+            z-index: 1; /* Pasa atrás */
+        }
+
+        #scene.open .letter-container {
+            height: 180%; /* Altura final desplegada */
+            transform: translateY(-80%) translateZ(20px) rotateX(-15deg); /* Sale y se endereza */
             z-index: 20;
-            height: 120%;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
         }
 
-        .envelope-wrapper.open {
-            transform: translateY(15%);
+        /* --- ESTILO DE LA CARTA Premium --- */
+        .letter-content {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            line-height: 1.9;
+            text-align: justify;
+            color: #222;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+        .letter-content p { margin-bottom: 20px; }
+
+        /* Capitular (Letra grande inicial) */
+        .letter-content p:first-of-type::first-letter {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            float: left;
+            margin-right: 10px;
+            margin-top: 5px;
+            color: var(--cobalt-deep);
+            line-height: 1;
         }
 
-        /* Responsivo para celulares */
-        @media (max-width: 500px) {
-            .envelope-wrapper { width: 320px; height: 220px; }
-            .letter { font-size: 0.9rem; padding: 15px; }
+        .letter-footer {
+            margin-top: 40px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 20px;
+        }
+
+        .hearts-signature {
+            font-size: 1.8rem;
+            animation: heartPulse 2s infinite;
+        }
+
+        /* Scrollbar premium */
+        .letter-paper::-webkit-scrollbar { width: 5px; }
+        .letter-paper::-webkit-scrollbar-thumb { background: #d0c8bf; border-radius: 5px; }
+
+        /* --- ANIMACIONES --- */
+        @keyframes textFocus {
+            0% { filter: blur(12px); opacity: 0; }
+            100% { filter: blur(0px); opacity: 1; }
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 1; color: #c94c4c; }
+        }
+
+        /* Adaptación a Móviles */
+        @media (max-width: 600px) {
+            #scene { width: 330px; height: 220px; }
+            .letter-paper { padding: 20px; font-size: 0.95rem; }
+            .letter-content p:first-of-type::first-letter { font-size: 2.8rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Música de fondo -->
-    <button id="music-btn" onclick="toggleMusic()">🎵 Reproducir Música</button>
-    <audio id="bg-music" src="mysong.flac" loop></audio>
+    <div id="intro-overlay" onclick="startExperience()">
+        <div class="intro-text">
+            <span>UNA HISTORIA</span><br>
+            <span>DE DOS MUNDOS...</span>
+        </div>
+        <div class="intro-hint">Click para entrar</div>
+    </div>
 
-    <!-- Canvas para los Fuegos Artificiales Cobalto -->
+    <audio id="bg-music" src="mysong.mp3" loop></audio>
+
     <canvas id="fireworksCanvas"></canvas>
 
-    <!-- Estructura del Sobre -->
-    <div class="envelope-wrapper" id="envelope" onclick="openEnvelope()">
-        <div class="flap"></div>
-        <div class="letter">
-            <p>Hace tiempo una bolita amarilla pachona entro a la vida de una bolita café, sin saberlo las bolitas se acercaron y un tiempo se alejaron actualmente esas dos bolitas están juntas son lo mejor de los dos mundos de la obscuridad y la luz...</p>
-            <p>La bolita amarilla dice no sentir sin embargo la bolita amarilla ve y sabe el esfuerzo que hace su pareja todos los días, lo mucho que la bolita café está orgulloso de la bolita amarilla y aunque aveces es difícil están ahí siempre juntos contra todos siendo hermosos, teniendo bellos corazones siendo los reyes de los corazones.</p>
-            <div class="letter-heart">👑💛🤎👑</div>
+    <div id="scene">
+        <div class="envelope" onclick="toggleEnvelope()">
+            
+            <div class="envelope-inside">
+                <div class="letter-container">
+                    <div class="letter-paper">
+                        <div class="letter-content">
+                            <p>Hace tiempo una bolita amarilla pachona entro a la vida de una bolita café, sin saberlo las bolitas se acercaron y un tiempo se alejaron actualmente esas dos bolitas están juntas son lo mejor de los dos mundos de la obscuridad y la luz...</p>
+                            <p>La bolita amarilla dice no sentir sin embargo la bolita amarilla ve y sabe el esfuerzo que hace su pareja todos los días, lo mucho que la bolita café está orgulloso de la bolita amarilla y aunque aveces es difícil están ahí siempre juntos contra todos siendo hermosos, teniendo bellos corazones siendo los reyes de los corazones.</p>
+                        </div>
+                        <div class="letter-footer">
+                            <div class="hearts-signature">👑💛🤎👑</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="envelope-front">
+                <div class="flap"></div>
+                <div class="pocket"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- LOGICA DE LA MÚSICA ---
+        // --- LÓGICA DE INICIO (MÚSICA Y FADE) ---
         const music = document.getElementById('bg-music');
-        const musicBtn = document.getElementById('music-btn');
-
-        function toggleMusic() {
-            if (music.paused) {
-                music.play().catch(e => console.log("Audio bloqueado por el navegador"));
-                musicBtn.innerText = "⏸ Pausar Música";
-            } else {
-                music.pause();
-                musicBtn.innerText = "🎵 Reproducir Música";
-            }
+        
+        function startExperience() {
+            // Ocultar overlay
+            document.getElementById('intro-overlay').classList.add('fade-out');
+            // Play música (ya permitido por la interacción)
+            music.play().catch(e => console.log("Audio prevenido"));
+            // Iniciar fuegos artificiales
+            loop();
         }
 
         // --- LÓGICA DEL SOBRE ---
-        function openEnvelope() {
-            const envelope = document.getElementById('envelope');
-            // Si no se ha iniciado la música, la arranca al interactuar
-            if(music.paused) { toggleMusic(); }
-            
-            envelope.classList.toggle('open');
+        function toggleEnvelope() {
+            document.getElementById('scene').classList.toggle('open');
         }
 
-        // --- LÓGICA DE FUEGOS ARTIFICIALES (AZUL COBALTO) ---
+        // --- CANVAS FUEGOS ARTIFICIALES AVANZADOS (Cobalto) ---
         const canvas = document.getElementById('fireworksCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -238,17 +311,15 @@
         resizeCanvas();
 
         class Particle {
-            constructor(x, y, color, angle, speed) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.radius = Math.random() * 2.5 + 1;
-                this.angle = angle;
-                this.speed = speed;
-                this.gravity = 0.05;
-                this.friction = 0.98;
+            constructor(x, y, color, angle, speed, isShimmer) {
+                this.x = x; this.y = y; this.color = color;
+                this.angle = angle; this.speed = speed;
+                this.friction = isShimmer ? 0.95 : 0.98;
+                this.gravity = isShimmer ? 0.02 : 0.1;
                 this.alpha = 1;
-                this.decay = Math.random() * 0.015 + 0.005;
+                this.decay = isShimmer ? 0.01 : (Math.random() * 0.015 + 0.01);
+                this.isShimmer = isShimmer;
+                this.radius = isShimmer ? (Math.random() * 1 + 0.5) : (Math.random() * 2 + 1);
             }
 
             draw() {
@@ -257,8 +328,10 @@
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = this.color;
+                if(!this.isShimmer) {
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = this.color;
+                }
                 ctx.fill();
                 ctx.restore();
             }
@@ -268,6 +341,10 @@
                 this.x += Math.cos(this.angle) * this.speed;
                 this.y += Math.sin(this.angle) * this.speed + this.gravity;
                 this.alpha -= this.decay;
+                if(this.isShimmer) {
+                    // Efecto de parpadeo para el "shimmer"
+                    this.alpha = Math.max(0, this.alpha + (Math.random() * 0.2 - 0.1));
+                }
             }
         }
 
@@ -275,48 +352,53 @@
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = canvas.height;
-                this.targetY = Math.random() * (canvas.height * 0.6);
-                this.speed = Math.random() * 4 + 7;
-                this.angle = -Math.PI / 2 + (Math.random() * 0.2 - 0.1);
-                this.particles = [];
+                this.targetY = canvas.height * 0.2 + (Math.random() * canvas.height * 0.4);
+                this.speed = Math.random() * 3 + 9;
                 this.exploded = false;
-                // Paleta de azul cobalto, rey y destellos eléctricos
-                this.colors = ['#0047AB', '#4169E1', '#1e90ff', '#002fa7', '#ffffff'];
+                this.particles = [];
+                // Paleta Cobalto Avanzada
+                this.colors = ['#002fa7', '#0047AB', '#1e90ff', '#87ceeb', '#ffffff'];
             }
 
             update() {
                 if (!this.exploded) {
-                    this.x += Math.cos(this.angle) * this.speed;
-                    this.y += Math.sin(this.angle) * this.speed;
-                    
-                    if (this.y <= this.targetY) {
+                    this.y -= this.speed;
+                    this.speed *= 0.99;
+                    if (this.speed <= 1 || this.y <= this.targetY) {
                         this.exploded = true;
                         this.explode();
                     }
                 } else {
                     for (let i = this.particles.length - 1; i >= 0; i--) {
                         this.particles[i].update();
-                        if (this.particles[i].alpha <= 0) {
-                            this.particles.splice(i, 1);
-                        }
+                        if (this.particles[i].alpha <= 0) this.particles.splice(i, 1);
                     }
                 }
             }
 
             explode() {
-                const particleCount = Math.random() * 60 + 80;
-                for (let i = 0; i < particleCount; i++) {
+                // Explosión principal
+                const count = 100;
+                for (let i = 0; i < count; i++) {
                     const angle = Math.random() * Math.PI * 2;
-                    const speed = Math.random() * 6 + 1;
+                    const speed = Math.random() * 6 + 2;
                     const color = this.colors[Math.floor(Math.random() * this.colors.length)];
-                    this.particles.push(new Particle(this.x, this.y, color, angle, speed));
+                    this.particles.push(new Particle(this.x, this.y, color, angle, speed, false));
+                }
+                // Añadir destellos (shimmer)
+                const shimmerCount = 50;
+                for (let i = 0; i < shimmerCount; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 8 + 1;
+                    this.particles.push(new Particle(this.x, this.y, '#ffffff', angle, speed, true));
                 }
             }
 
             draw() {
                 if (!this.exploded) {
+                    // Cohete subiendo
                     ctx.beginPath();
-                    ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                    ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
                     ctx.fillStyle = '#4169E1';
                     ctx.fill();
                 } else {
@@ -328,11 +410,12 @@
         let fireworks = [];
 
         function loop() {
-            // Estela oscura de fondo para efecto cinematográfico
-            ctx.fillStyle = 'rgba(10, 11, 16, 0.2)';
+            // Estela de humo/oscuridad
+            ctx.fillStyle = 'rgba(5, 6, 9, 0.15)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            if (Math.random() < 0.04 && fireworks.length < 5) {
+            // Control de frecuencia de fuegos
+            if (Math.random() < 0.025 && fireworks.length < 5) {
                 fireworks.push(new Firework());
             }
 
@@ -346,8 +429,6 @@
 
             requestAnimationFrame(loop);
         }
-
-        loop();
     </script>
 </body>
 </html>
