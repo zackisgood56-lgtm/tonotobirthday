@@ -1,485 +1,84 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para el Rey de los Corazones</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-color: #020205;
-            --cobalt-primary: #0047AB;
-            --cobalt-glow: #1e90ff;
-            --relic-metal: #121218;
-            --relic-accent: #1e2a3a;
-            --text-main: #f0f0f5;
-            --text-accent: #d1c7bd;
-            --gold-light: #f5e0ac;
-            --transition-speed: 0.8s;
-            --font-display: 'Playfair Display', serif;
-            --font-ui: 'Space Grotesk', sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para el Rey de los Corazones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+<style>
+:root {
+    --bg-color: #020205;
+    --cobalt-primary: #0047AB;
+    --cobalt-glow: #1e90ff;
+    --relic-metal: #121218;
+    --relic-accent: #1e2a3a;
+    --text-main: #f0f0f5;
+    --text-accent: #d1c7bd;
+    --gold-light: #f5e0ac;
+    --transition-speed: 0.8s;
+    --font-display: 'Playfair Display', serif;
+    --font-ui: 'Space Grotesk', sans-serif;
+}
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow: hidden;
-            font-family: var(--font-ui);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            perspective: 2000px;
-        }
+/* --- General --- */
+* { box-sizing: border-box; margin:0; padding:0; cursor:none; }
+body { background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-ui); height:100vh; overflow:hidden; display:flex; justify-content:center; align-items:center; perspective:2000px; }
 
-        /* --- Canva de Fondo (Fuegos Artificiales Cobalto Avanzados) --- */
-        #bg-canvas {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
+/* --- Cursor Personalizado --- */
+#custom-cursor { width:20px; height:20px; border:2px solid var(--cobalt-glow); border-radius:50%; position:fixed; pointer-events:none; z-index:1000; transform:translate(-50%,-50%); transition:0.2s; mix-blend-mode:difference; }
 
-        /* --- Controles de Música --- */
-        #music-btn {
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            z-index: 100;
-            background: rgba(0, 71, 171, 0.2);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid var(--cobalt-glow);
-            padding: 12px 24px;
-            border-radius: 30px;
-            color: white;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0, 112, 255, 0.15);
-            transition: all 0.3s;
-        }
+/* --- Canvas de Fondo Partículas --- */
+#bg-canvas { position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
 
-        /* --- RELICARIO DIGITAL EN 3D --- */
-        #relic-scene {
-            width: 450px;
-            height: 380px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform var(--transition-speed);
-            z-index: 10;
-        }
+/* --- Controles de Música --- */
+#music-btn {
+    position: fixed; top:25px; right:25px; z-index:100;
+    background: rgba(0,71,171,0.2); backdrop-filter:blur(8px);
+    border:1px solid var(--cobalt-glow); padding:12px 24px;
+    border-radius:30px; font-family:var(--font-ui);
+    color:white; font-size:0.9rem; text-transform:uppercase;
+    letter-spacing:1px; display:flex; align-items:center; gap:10px;
+    box-shadow:0 5px 20px rgba(0,112,255,0.15);
+    transition: all 0.3s;
+}
+#music-btn:hover { background: rgba(0,112,255,0.4); box-shadow:0 10px 30px rgba(0,112,255,0.3); }
 
-        #relic-scene.open {
-            transform: rotateX(8deg) scale(1.05);
-        }
+/* --- Mini-juego contenedor --- */
+#game-container {
+    position: relative; width: 800px; height: 200px; background: linear-gradient(#020205,#0a0a10);
+    overflow:hidden; border:2px solid var(--cobalt-primary); border-radius:12px;
+    display:flex; justify-content:flex-start; align-items:flex-end; z-index:5;
+}
 
-        .relic-wrapper {
-            width: 100%; height: 100%;
-            position: absolute;
-            transform-style: preserve-3d;
-            transform-origin: center;
-        }
+/* --- Focas Pixel Art --- */
+.foca {
+    width:32px; height:32px; position:absolute; bottom:0; image-rendering: pixelated;
+}
+#foca-yellow { left:50px; background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABFUlEQVRYR+2WMQ6AIAxEJ+d/8XE/wl6I0kNzRzM5H5WjAKv+Nhl04WSCCCGEEEIIIYQQQgjE8zfK3WmP1Xg4iQka6kA0QEAgg4yPQWhIlM9L7aIM7iT3P7mF9+GxohLQruUfgd0cI5K0oIo3kC9pB6RcZ8IPhlkiTJk9rH6IH0sL3+8P4SrgzYdoYbB+0eLyHgHxX6BX3BAEQQgghhBBCCCGEEEIIIYQQ0j8QFAd9f6w6OKiMAAAAAElFTkSuQmCC') no-repeat center/contain;}
+#foca-brown { left:100px; background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABF0lEQVRYR+2WMQ6AIAxEJ+d/8XG4RkFhQN/koeQmtghcB7P4p44QjCSEEEIIIYQQQgjkfhzZ6H3r5gf+qjqJHyXKAPBBDCCCEEEIIIYQQQgjh0+Od93y6HixpKx7bEQAggghhBBCCCGEEEII4X/EOA5vAMppR1nJQwAAAABJRU5ErkJggg==') no-repeat center/contain;}
 
-        /* Frontal del Relicario (Contenedor del Juego) */
-        .relic-front {
-            width: 100%; height: 100%;
-            position: absolute;
-            background-color: var(--relic-metal);
-            border-radius: 12px;
-            box-shadow: 0 30px 90px rgba(0,0,0,0.9);
-            transform-style: preserve-3d;
-            z-index: 5;
-            border: 2px solid #1a2233;
-        }
+/* --- Obstáculos --- */
+.obstacle {
+    width:32px; height:32px; position:absolute; bottom:0; background:#1e90ff; border:1px solid white; }
 
-        /* Puertas Corredizas */
-        .relic-door {
-            width: 50%; height: 100%;
-            position: absolute;
-            top: 0;
-            background-color: var(--relic-accent);
-            border: 1px solid rgba(255,255,255,0.05);
-            transform-style: preserve-3d;
-            transition: transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 10;
-        }
-
-        .relic-door.left {
-            left: 0;
-            border-radius: 12px 0 0 12px;
-            transform-origin: left;
-            border-right: 2px solid var(--cobalt-primary);
-        }
-
-        .relic-door.right {
-            right: 0;
-            border-radius: 0 12px 12px 0;
-            transform-origin: right;
-            border-left: 2px solid var(--cobalt-primary);
-        }
-
-        /* Animaciones de Apertura Física */
-        #relic-scene.open .relic-door.left { transform: rotateY(-130deg); }
-        #relic-scene.open .relic-door.right { transform: rotateY(130deg); }
-
-        .symbol-overlay {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) translateZ(20px);
-            font-size: 3.5rem;
-            color: var(--gold-light);
-            text-shadow: 0 0 20px var(--cobalt-glow);
-            z-index: 11;
-            pointer-events: none;
-            transition: opacity 0.4s;
-        }
-        #relic-scene.open .symbol-overlay { opacity: 0; }
-
-        /* --- INTERIOR CON EL TEXTO --- */
-        .relic-back {
-            width: 100%; height: 100%;
-            position: absolute;
-            top: 0; left: 0;
-            background-color: #0b0c10;
-            border-radius: 12px;
-            border: 2px solid var(--cobalt-primary);
-            box-shadow: inset 0 0 60px rgba(0, 112, 255, 0.3);
-            z-index: 1;
-            padding: 35px;
-            overflow-y: auto;
-            opacity: 0;
-            transition: opacity 0.5s var(--transition-speed);
-        }
-        #relic-scene.open .relic-back { opacity: 1; }
-
-        .relic-content {
-            font-family: var(--font-display);
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--text-accent);
-            text-align: justify;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s 0.6s, transform 1s 0.6s;
-        }
-        #relic-scene.open .relic-content { opacity: 1; transform: translateY(0); }
-        .relic-content p { margin-bottom: 15px; }
-
-        .relic-footer {
-            margin-top: 25px;
-            text-align: center;
-            font-size: 2rem;
-        }
-
-        /* --- ÁREA DEL MINI JUEGO (ZONA ARCADE) --- */
-        .game-container {
-            position: absolute;
-            width: 100%; height: 100%;
-            top: 0; left: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: #0f111a;
-            border-radius: 10px;
-            padding: 20px;
-            z-index: 2; /* Detrás de las puertas, delante del fondo */
-        }
-
-        #gameCanvas {
-            background: #161925;
-            border: 2px solid var(--cobalt-primary);
-            border-radius: 6px;
-            box-shadow: 0 0 15px rgba(0, 71, 171, 0.3);
-            max-width: 100%;
-            display: block;
-        }
-
-        .game-instructions {
-            font-size: 0.8rem;
-            color: #65758c;
-            margin-top: 10px;
-            letter-spacing: 1px;
-            text-align: center;
-            text-transform: uppercase;
-        }
-
-        /* --- Scrollbar --- */
-        .relic-back::-webkit-scrollbar { width: 5px; }
-        .relic-back::-webkit-scrollbar-thumb { background: var(--cobalt-primary); border-radius: 3px; }
-
-        /* Ajustes Móvil */
-        @media (max-width: 600px) {
-            #relic-scene { width: 92%; height: 340px; }
-            .relic-back { padding: 20px; }
-            .relic-content { font-size: 0.95rem; }
-        }
-    </style>
-</head>
-<body>
-
-    <canvas id="bg-canvas"></canvas>
-
-    <button id="music-btn" onclick="toggleAudio()">▶ MÚSICA</button>
-    <audio id="mysong" src="mysong.mp3" loop></audio>
-
-    <div id="relic-scene">
-        <div class="relic-wrapper">
-            
-            <div class="relic-door left" id="doorL" onclick="startExperience()"></div>
-            <div class="relic-door right" id="doorR" onclick="startExperience()"></div>
-            <div class="symbol-overlay" id="centerSeal" onclick="startExperience()">👑</div>
-
-            <div class="game-container">
-                <canvas id="gameCanvas" width="400" height="220"></canvas>
-                <div class="game-instructions" id="gameHint">Toca la pantalla o usa Espacio para Saltar</div>
-            </div>
-
-            <div class="relic-back">
-                <div class="relic-content">
-                    <p>Hace tiempo una bolita amarilla pachona entró a la vida de una bolita café, sin saberlo las bolitas se acercaron y un tiempo se alejaron actualmente esas dos bolitas están juntas son lo mejor de los dos mundos de la obscuridad y la luz...</p>
-                    <p>La bolita amarilla dice no sentir sin embargo la bolita amarilla ve y sabe el esfuerzo que hace su pareja todos los días, lo mucho que la bolita café está orgulloso de la bolita amarilla y aunque aveces es difícil están ahí siempre juntos contra todos siendo hermosos, teniendo bellos corazones siendo los reyes de los corazones.</p>
-                </div>
-                <div class="relic-footer">👑💛🤎👑</div>
-            </div>
-
-        </div>
-    </div>
-
-    <script>
-        // --- AUDIO ENGINE ---
-        const audio = document.getElementById('mysong');
-        function toggleAudio() {
-            const btn = document.getElementById('music-btn');
-            if (audio.paused) { audio.play(); btn.innerText = "⏸ PAUSAR"; } 
-            else { audio.pause(); btn.innerText = "▶ MÚSICA"; }
-        }
-
-        // --- SISTEMA INTERACTIVO DE FUEGOS ARTIFICIALES (AZUL COBALTO) ---
-        const bgCanvas = document.getElementById('bg-canvas');
-        const bgCtx = bgCanvas.getContext('2d');
-        let fireworksActive = false;
-
-        function resizeCanvas() { bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor(x, y, color) {
-                this.x = x; this.y = y; this.color = color;
-                this.radius = Math.random() * 2 + 0.8;
-                const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 5 + 1.5;
-                this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed;
-                this.gravity = 0.06;
-                this.alpha = 1;
-                this.decay = Math.random() * 0.015 + 0.008;
-            }
-            draw() {
-                bgCtx.save();
-                bgCtx.globalAlpha = this.alpha;
-                bgCtx.beginPath();
-                bgCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                bgCtx.fillStyle = this.color;
-                bgCtx.shadowBlur = 10;
-                bgCtx.shadowColor = this.color;
-                bgCtx.fill();
-                bgCtx.restore();
-            }
-            update() {
-                this.vx *= 0.98; this.vy *= 0.98;
-                this.x += this.vx; this.y += this.vy + this.gravity;
-                this.alpha -= this.decay;
-            }
-        }
-
-        class Firework {
-            constructor() {
-                this.x = Math.random() * bgCanvas.width;
-                this.y = bgCanvas.height;
-                this.targetY = Math.random() * (bgCanvas.height * 0.5) + (bgCanvas.height * 0.1);
-                this.speed = Math.random() * 3 + 8;
-                this.exploded = false;
-                this.particles = [];
-                this.colors = ['#0047AB', '#1e90ff', '#4169E1', '#ffffff'];
-            }
-            update() {
-                if (!this.exploded) {
-                    this.y -= this.speed;
-                    if (this.y <= this.targetY) {
-                        this.exploded = true;
-                        for (let i = 0; i < 65; i++) {
-                            this.particles.push(new Particle(this.x, this.y, this.colors[Math.floor(Math.random() * this.colors.length)]));
-                        }
-                    }
-                } else {
-                    for (let i = this.particles.length - 1; i >= 0; i--) {
-                        this.particles[i].update();
-                        if (this.particles[i].alpha <= 0) this.particles.splice(i, 1);
-                    }
-                }
-            }
-            draw() {
-                if (!this.exploded) {
-                    bgCtx.beginPath();
-                    bgCtx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
-                    bgCtx.fillStyle = '#1e90ff';
-                    bgCtx.fill();
-                } else { this.particles.forEach(p => p.draw()); }
-            }
-        }
-
-        let fireworksList = [];
-        function loopBackground() {
-            bgCtx.fillStyle = 'rgba(2, 2, 5, 0.2)';
-            bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-
-            if (fireworksActive && Math.random() < 0.04 && fireworksList.length < 6) {
-                fireworksList.push(new Firework());
-            }
-
-            for (let i = fireworksList.length - 1; i >= 0; i--) {
-                fireworksList[i].update();
-                fireworksList[i].draw();
-                if (fireworksList[i].exploded && fireworksList[i].particles.length === 0) fireworksList.splice(i, 1);
-            }
-            requestAnimationFrame(loopBackground);
-        }
-        loopBackground();
-
-        // --- ARRANQUE EXPERIENCIA ---
-        let experienceStarted = false;
-        function startExperience() {
-            if(experienceStarted) return;
-            experienceStarted = true;
-            
-            // Abrir las puertas exteriores metálicas para revelar el juego arcade
-            document.getElementById('doorL').style.transform = 'translateX(-100%)';
-            document.getElementById('doorR').style.transform = 'translateX(100%)';
-            document.getElementById('centerSeal').style.opacity = '0';
-            
-            if (audio.paused) toggleAudio();
-            initGame();
-        }
-
-        // --- MINI JUEGO: DINO CHROME VERSIÓN FOCA ---
-        const gCanvas = document.getElementById('gameCanvas');
-        const gCtx = gCanvas.getContext('2d');
-        
-        let gameRunning = false;
-        let seal, obstacles, score, gameLoopId;
-
-        function initGame() {
-            seal = { x: 40, y: 160, width: 26, height: 26, vy: 0, gravity: 0.6, jumpPower: -9.5, isGrounded: true };
-            obstacles = [];
-            score = 0;
-            gameRunning = true;
-            spawnObstacle();
-            runGame();
-        }
-
-        function spawnObstacle() {
-            if(!gameRunning) return;
-            // Obstáculos tipo bloques de hielo flotantes o rocas
-            obstacles.push({ x: gCanvas.width, y: 165, width: 15, height: 20, speed: 4.5 + (score * 0.1) });
-            setTimeout(spawnObstacle, Math.random() * 1200 + 900);
-        }
-
-        // Inputs universales (Teclado + Touch de celular)
-        window.addEventListener('keydown', (e) => { if (e.code === 'Space') jumpSeal(); });
-        gCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); jumpSeal(); });
-        gCanvas.addEventListener('click', jumpSeal);
-
-        function jumpSeal() {
-            if (!gameRunning) return;
-            if (seal.isGrounded) {
-                seal.vy = seal.jumpPower;
-                seal.isGrounded = false;
-            }
-        }
-
-        function runGame() {
-            if (!gameRunning) return;
-            gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
-
-            // Dibujar Línea de Tierra (Mar/Hielo)
-            gCtx.strokeStyle = 'rgba(30, 144, 255, 0.4)';
-            gCtx.lineWidth = 2;
-            gCtx.beginPath(); gCtx.moveTo(0, 185); gCtx.lineTo(gCanvas.width, 185); gCtx.stroke();
-
-            // Físicas Foca
-            seal.vy += seal.gravity;
-            seal.y += seal.vy;
-            if (seal.y >= 160) { seal.y = 160; seal.vy = 0; seal.isGrounded = true; }
-
-            // Dibujar la Foca (Pixel Art Simplificado de Lujo)
-            gCtx.fillStyle = '#d1c7bd'; // Color foca
-            gCtx.beginPath();
-            gCtx.ellipse(seal.x + 13, seal.y + 13, 13, 9, 0, 0, Math.PI * 2); // Cuerpo
-            gCtx.fill();
-            gCtx.fillStyle = '#a69a8f';
-            gCtx.beginPath(); gCtx.arc(seal.x + 22, seal.y + 7, 5, 0, Math.PI * 2); gCtx.fill(); // Cabeza foca
-            gCtx.fillStyle = '#000';
-            gCtx.fillRect(seal.x + 24, seal.y + 6, 2, 2); // Ojito
-
-            // Manejar Obstáculos
-            for (let i = obstacles.length - 1; i >= 0; i--) {
-                let obs = obstacles[i];
-                obs.x -= obs.speed;
-
-                // Dibujar Obstáculo (Punta de témpano de hielo)
-                gCtx.fillStyle = '#1e90ff';
-                gCtx.beginPath();
-                gCtx.moveTo(obs.x, obs.y + obs.height);
-                gCtx.lineTo(obs.x + obs.width / 2, obs.y);
-                gCtx.lineTo(obs.x + obs.width, obs.y + obs.height);
-                gCtx.fill();
-
-                // Detección de Colisión Milimétrica
-                if (seal.x < obs.x + obs.width && seal.x + seal.width > obs.x &&
-                    seal.y < obs.y + obs.height && seal.y + seal.height > obs.y) {
-                    gameOver();
-                    return;
-                }
-
-                // Borrar si sale de pantalla
-                if (obs.x + obs.width < 0) { obstacles.splice(i, 1); score++; }
-            }
-
-            // Dibujar Marcador de Puntos
-            gCtx.fillStyle = '#f0f0f5';
-            gCtx.font = '12px "Space Grotesk"';
-            gCtx.fillText(`PUNTOS: ${score}`, 20, 25);
-
-            gameLoopId = requestAnimationFrame(runGame);
-        }
-
-        function gameOver() {
-            gameRunning = false;
-            cancelAnimationFrame(gameLoopId);
-
-            // Efecto cinematográfico: El Relicario se abre por completo para revelar la carta
-            document.getElementById('relic-scene').classList.add('open');
-            document.getElementById('gameHint').innerText = "¡REVELANDO EL SECRETO DEL REY!";
-            
-            // Se activan los fuegos artificiales de fondo permanentemente
-            fireworksActive = true;
-        }
-    </script>
-</body>
-</html>
+/* --- Relicario Digital --- */
+#relic-scene { width:450px; height:350px; position:relative; transform-style: preserve-3d; transition:transform var(--transition-speed); z-index:10; display:none; }
+#relic-scene.open { transform: rotateX(10deg) translateY(50px) scale(1.05); display:block; }
+.relic-wrapper { width:100%; height:100%; position:absolute; transform-style: preserve-3d; transform-origin:center; animation: slowSpin 30s linear infinite; }
+.relic-front { width:100%; height:100%; position:absolute; background-color: var(--relic-metal); border-radius:12px; box-shadow:0 30px 90px rgba(0,0,0,0.9); display:flex; overflow:hidden; z-index:5; }
+.relic-door { width:50%; height:100%; position:absolute; top:0; background-color: var(--relic-accent); border:1px solid rgba(255,255,255,0.05); transform-style: preserve-3d; transition:transform var(--transition-speed) cubic-bezier(0.6,-0.28,0.735,0.045), z-index var(--transition-speed);}
+.relic-door.left { left:0; border-radius:12px 0 0 12px; transform-origin:right; border-right:2px solid var(--cobalt-primary);}
+.relic-door.right { right:0; border-radius:0 12px 12px 0; transform-origin:left; border-left:2px solid var(--cobalt-primary);}
+#relic-scene.open .relic-door.left { transform: rotateY(-110deg) translateX(-10px); z-index:1; }
+#relic-scene.open .relic-door.right { transform: rotateY(110deg) translateX(10px); z-index:1; }
+.symbol-overlay { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) translateZ(20px); font-size:3rem; color: var(--gold-light); text-shadow:0 0 15px var(--gold-light),0 0 30px var(--cobalt-glow); z-index:10; pointer-events:none; transition:opacity 0.5s; }
+#relic-scene.open .symbol-overlay { opacity:0; }
+.relic-back { width:100%; height:100%; position:absolute; top:0; left:0; background-color:var(--bg-color); border-radius:12px; border:2px solid var(--cobalt-primary); box-shadow:inset 0 0 50px rgba(0,112,255,0.15); z-index:1; padding:40px; transform:translateZ(-10px); overflow-y:auto; opacity:0; transition:opacity 0.5s var(--transition-speed);}
+#relic-scene.open .relic-back { opacity:1; }
+.relic-content { font-family:var(--font-display); font-size:1.15rem; line-height:1.9; color:var(--text-accent); text-align:justify; opacity:0; transform:translateY(20px); transition:opacity 1s 1s, transform 1s 1s; }
+#relic-scene.open .relic-content { opacity:1; transform:translateY(0); }
+.relic-content p { margin-bottom:20px; opacity:0; animation: fadeInText 1s forwards; }
+.relic-content p:nth-child(1) { animation-delay:
