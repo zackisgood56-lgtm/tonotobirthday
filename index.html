@@ -12,7 +12,7 @@
         --bg-color: #020208;  
         --cobalt-primary: #0047AB;  
         --cobalt-glow: #1e90ff;  
-        --glass-bg: rgba(10, 10, 20, 0.7);
+        --glass-bg: rgba(10, 10, 20, 0.72);  
         --text-main: #f0f0f5;  
         --text-accent: #e2d9d0;  
         --gold-light: #f5e0ac;  
@@ -36,12 +36,12 @@
         flex-direction: column;  
         justify-content: center;  
         align-items: center;  
-        perspective: 1500px; 
+        perspective: 1500px;  
         touch-action: none;  
     }  
 
     @media (pointer: fine) {  
-        body, #game-container, .relic-container, #music-btn { cursor: none; }  
+        body, #game-container, .relic-box, #music-btn, #foca-dvd { cursor: none; }  
     }  
 
     /* --- Fondo de Partículas --- */  
@@ -55,7 +55,7 @@
         pointer-events: none;  
     }  
 
-    /* --- Botón de Música Premium --- */  
+    /* --- Botón de Música --- */  
     #music-btn {  
         position: fixed;  
         top: 25px;  
@@ -63,7 +63,7 @@
         z-index: 100;  
         background: rgba(0, 71, 171, 0.2);  
         backdrop-filter: blur(12px);  
-        -webkit-backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);  
         border: 1px solid rgba(30, 144, 255, 0.4);  
         padding: 12px 24px;  
         border-radius: 30px;  
@@ -82,7 +82,7 @@
     #music-btn:hover {  
         background: rgba(0, 112, 255, 0.35);  
         box-shadow: 0 0 20px var(--cobalt-glow);  
-        transform: translateY(-2px);
+        transform: translateY(-2px);  
     }  
 
     /* --- MINI JUEGO DINO FOCAS --- */  
@@ -90,9 +90,9 @@
         width: 90%;  
         max-width: 600px;  
         height: 200px;  
-        background: rgba(5, 5, 15, 0.4);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: rgba(5, 5, 15, 0.4);  
+        backdrop-filter: blur(10px);  
+        -webkit-backdrop-filter: blur(10px);  
         overflow: hidden;  
         border: 2px solid rgba(0, 71, 171, 0.5);  
         border-radius: 16px;  
@@ -107,100 +107,81 @@
         color: white;  
         font-size: 1.2rem;  
         z-index: 10;  
-        text-shadow: 0 0 8px var(--cobalt-glow);
+        text-shadow: 0 0 8px var(--cobalt-glow);  
     }  
 
-    /* --- NUEVO RELICARIO 3D ESTABLE Y REALISTA --- */  
+    /* --- RELICARIO MODERNO GLASSMORPHISM --- */  
     #relic-scene {  
         width: 450px;  
         height: 450px;  
         position: relative;  
         z-index: 10;  
-        display: none; /* Se activa al llegar a 100 */
-        animation: floatAnimation 4s ease-in-out infinite;
+        display: none;   
+        animation: floatAnimation 4s ease-in-out infinite;  
     }  
 
-    /* Caja contenedora con efecto Glassmorphism */
-    .relic-box {
-        width: 100%;
-        height: 100%;
-        background: var(--glass-bg);
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        border: 2px solid rgba(30, 144, 255, 0.3);
-        border-radius: 24px;
-        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 
-                    inset 0 0 40px rgba(0, 71, 171, 0.25),
-                    0 0 30px rgba(0, 71, 171, 0.1);
-        position: relative;
-        overflow: hidden;
-        transition: border-color 0.5s ease;
-    }
+    #relic-scene.open {  
+        animation-play-state: paused;  
+    }  
 
-    /* Puertas de seguridad frontales */
-    .door-panel {
-        position: absolute;
-        top: 0;
-        width: 50%;
-        height: 100%;
-        background: linear-gradient(135deg, #12121c, #1a2436);
-        box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
-        transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-        z-index: 5;
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-    }
-    
-    .door-panel.left {
-        left: 0;
-        border-right: 2px solid var(--cobalt-primary);
-        border-radius: 22px 0 0 22px;
-        justify-content: flex-end;
-    }
-    
-    .door-panel.right {
-        right: 0;
-        border-left: 2px solid var(--cobalt-primary);
-        border-radius: 0 22px 22px 0;
-        justify-content: flex-start;
-    }
+    .relic-box {  
+        width: 100%;  
+        height: 100%;  
+        background: var(--glass-bg);  
+        backdrop-filter: blur(25px);  
+        -webkit-backdrop-filter: blur(25px);  
+        border: 2px solid rgba(30, 144, 255, 0.3);  
+        border-radius: 24px;  
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8),   
+                    inset 0 0 40px rgba(0, 71, 171, 0.25);  
+        position: relative;  
+        overflow: hidden;  
+        transition: border-color 0.5s ease;  
+    }  
 
-    /* Apertura cinemática */
-    #relic-scene.open .door-panel.left { transform: translateX(-100%); }
-    #relic-scene.open .door-panel.right { transform: translateX(100%); }
-    #relic-scene.open .relic-box { border-color: rgba(0, 71, 171, 0.8); }
+    .door-panel {  
+        position: absolute;  
+        top: 0;  
+        width: 50%;  
+        height: 100%;  
+        background: linear-gradient(135deg, #12121c, #1a2436);  
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.6);  
+        transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);  
+        z-index: 5;  
+    }  
+      
+    .door-panel.left { left: 0; border-right: 2px solid var(--cobalt-primary); border-radius: 22px 0 0 22px; }  
+    .door-panel.right { right: 0; border-left: 2px solid var(--cobalt-primary); border-radius: 0 22px 22px 0; }  
 
-    /* Emblema central de la corona */
-    .center-lock {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 3.5rem;
-        z-index: 10;
-        cursor: pointer;
-        transition: all 0.5s ease;
-        text-shadow: 0 0 20px var(--gold-light), 0 0 40px var(--cobalt-glow);
-    }
-    #relic-scene.open .center-lock { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0); }
+    #relic-scene.open .door-panel.left { transform: translateX(-100%); }  
+    #relic-scene.open .door-panel.right { transform: translateX(100%); }  
 
-    /* Contenido de la Carta Interna (SIEMPRE AL DERECHO) */
-    .inner-card {
-        width: 100%;
-        height: 100%;
-        padding: 40px 30px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        opacity: 0;
-        transform: scale(0.95);
-        transition: opacity 0.8s ease 0.6s, transform 0.8s ease 0.6s;
-        z-index: 2;
-    }
-    
-    #relic-scene.open .inner-card { opacity: 1; transform: scale(1); }
+    .center-lock {  
+        position: absolute;  
+        top: 50%;  
+        left: 50%;  
+        transform: translate(-50%, -50%);  
+        font-size: 3.5rem;  
+        z-index: 10;  
+        transition: all 0.5s ease;  
+        text-shadow: 0 0 20px var(--gold-light), 0 0 40px var(--cobalt-glow);  
+    }  
+    #relic-scene.open .center-lock { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0); }  
+
+    .inner-card {  
+        width: 100%;  
+        height: 100%;  
+        padding: 40px 30px;  
+        overflow-y: auto;  
+        display: flex;  
+        flex-direction: column;  
+        opacity: 0;  
+        transform: scale(0.95);  
+        transition: opacity 0.8s ease 0.6s, transform 0.8s ease 0.6s;  
+        z-index: 2;  
+    }  
+      
+    #relic-scene.open .inner-card { opacity: 1; transform: scale(1); }  
 
     .relic-content {  
         font-family: var(--font-display);  
@@ -209,43 +190,82 @@
         color: var(--text-accent);  
         text-align: justify;  
     }  
+    .relic-content p { margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }  
+    .relic-footer { margin-top: auto; padding-top: 20px; text-align: center; font-size: 2.2rem; }  
 
-    .relic-content p {  
-        margin-bottom: 20px;  
-        text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    /* --- FOCA ESTILO LOGO DVD --- */  
+    #foca-dvd {  
+        position: fixed;  
+        width: 75px;  
+        height: 75px;  
+        z-index: 2;  
+        display: none;  
+        user-select: none;  
+        touch-action: none;  
+        animation: spinFoca 3s linear infinite;  
     }  
 
-    .relic-footer {  
-        margin-top: auto;
-        padding-top: 20px;
+    /* --- EFECTO GLITCH DE PANTALLA --- */  
+    .glitch-active {  
+        animation: screenGlitch 0.15s steps(2) infinite;  
+    }  
+
+    /* --- FOTO POLAROID REVELADA --- */  
+    #polaroid-container {  
+        position: fixed;  
+        z-index: 200;  
+        background: #ffffff;  
+        padding: 16px 16px 28px 16px;  
+        box-shadow: 0 35px 80px rgba(0,0,0,0.85), 0 0 40px rgba(30, 144, 255, 0.3);  
+        border-radius: 4px;  
+        display: none;  
+        flex-direction: column;  
+        align-items: center;  
+        transform: scale(0) rotate(-25deg);  
+        transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);  
+        max-width: 310px;  
+        width: 85%;  
+    }  
+
+    #polaroid-container img {  
+        width: 100%;  
+        height: auto;  
+        aspect-ratio: 1 / 1;  
+        object-fit: cover;  
+        border: 1px solid #ddd;  
+        background: #050505;  
+    }  
+
+    #polaroid-container .caption {  
+        font-family: var(--font-display);  
+        font-style: italic;  
+        color: #1a1a24;  
+        font-size: 1.15rem;  
+        margin-top: 18px;  
         text-align: center;  
-        font-size: 2.2rem;  
-        filter: drop-shadow(0 0 10px rgba(255,215,0,0.4));
+        font-weight: 600;  
     }  
 
-    /* --- Animaciones y Efectos Visuales --- */  
-    @keyframes floatAnimation {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-    }
-    @keyframes pulseSymbol {  
-        0%, 100% { transform: translate(-50%, -50%) scale(1); filter: brightness(1); }  
-        50% { transform: translate(-50%, -50%) scale(1.1); filter: brightness(1.3); }  
+    /* --- Animaciones Keyframes --- */  
+    @keyframes floatAnimation { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }  
+    @keyframes spinFoca { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }  
+    @keyframes pulseSymbol { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } }  
+    
+    @keyframes screenGlitch {  
+        0% { transform: translate(2px, 1px) skew(2deg); filter: hue-rotate(90deg) contrast(1.5); }  
+        50% { transform: translate(-1px, -2px) skew(-3deg); filter: hue-rotate(180deg) invert(1); }  
+        100% { transform: translate(1px, 2px) skew(0deg); filter: hue-rotate(0deg); }  
     }  
 
-    /* Scrollbar invisible y premium */
     .inner-card::-webkit-scrollbar { width: 4px; }  
-    .inner-card::-webkit-scrollbar-track { background: transparent; }  
     .inner-card::-webkit-scrollbar-thumb { background: rgba(30, 144, 255, 0.4); border-radius: 10px; }  
 
-    /* --- Adaptación para Celulares --- */  
     @media (max-width: 600px) {  
         #relic-scene { width: 92%; max-width: 360px; height: 460px; }  
         .inner-card { padding: 30px 20px; }  
         .relic-content { font-size: 0.98rem; line-height: 1.65; }  
-        .center-lock { font-size: 2.8rem; }  
     }  
-</style>
+</style>  
 </head>  
 <body>  
 
@@ -261,34 +281,39 @@
     <div id="score">0</div>  
 </div>  
 
+<canvas id="foca-dvd" onclick="catchFoca(event)" ontouchstart="catchFoca(event)"></canvas>  
+
 <div id="relic-scene">  
-    <div class="center-lock" id="lock-btn" onclick="openRelic()" style="animation: pulseSymbol 2.5s infinite;">👑</div>
+    <div class="center-lock" id="lock-btn" onclick="openRelic()" style="animation: pulseSymbol 2.5s infinite;">👑</div>  
     <div class="relic-box">  
-        
         <div class="door-panel left"></div>  
         <div class="door-panel right"></div>  
 
-        <div class="inner-card">
+        <div class="inner-card">  
             <div class="relic-content">  
                 <p>Hace tiempo una bolita amarilla pachona entró a la vida de una bolita café, sin saberlo las bolitas se acercaron y un tiempo se alejaron... Actualmente esas dos bolitas están juntas, son lo mejor de los dos mundos de la oscuridad y la luz. Ni el Sincorazón más poderoso de Kingdom Hearts podría apagar la brillante conexión de nuestros mundos.</p>  
                 <p>La bolita amarilla dice no sentir, sin embargo, la bolita amarilla ve y sabe el esfuerzo que hace su pareja todos los días, lo mucho que la bolita café está orgullosa de ella. Y aunque a veces es difícil, este amor es "The Greatest Show", el mejor espectáculo del planeta. Estamos aquí siempre juntos contra todos, reescribiendo las estrellas paso a paso.</p>  
                 <p>Siendo hermosos, teniendo bellos corazones y siendo legítimamente los reyes de los corazones. No importa cuán caótico parezca el mañana exterior, hagamos que todo el ruido se detenga por completo, porque somos absolutamente "Beautiful Now", una hermosa realidad en este instante eterno.</p>  
             </div>  
             <div class="relic-footer">👑✨💛🤎</div>  
-        </div>
-
+        </div>  
     </div>  
 </div>  
 
+<div id="polaroid-container">  
+    <img src="tonotos.jpg" alt="Tonotos">  
+    <div class="caption">te amo feliz cumpleaños tonoto :3</div>  
+</div>  
+
 <script>  
-    // --- Lógica de Música ---  
+    // --- Música ---  
     function toggleAudio(e) {  
         if(e) e.stopPropagation();  
         const audio = document.getElementById('mysong');  
         const icon = document.getElementById('audio-icon');  
         const text = document.getElementById('audio-text');  
         if (audio.paused) {  
-            audio.play().catch(() => { console.log("Se requiere interacción para reproducir."); });  
+            audio.play().catch(() => {});  
             icon.innerText = "⏸";  
             text.innerText = "Pausar";  
         } else {  
@@ -298,79 +323,115 @@
         }  
     }  
 
-    // --- Acción de Apertura Limpia ---  
+    // --- Abrir Relicario e iniciar Foca DVD ---  
     function openRelic() {  
-        const scene = document.getElementById('relic-scene');  
-        scene.classList.add('open');  
+        document.getElementById('relic-scene').classList.add('open');  
+        setTimeout(initFocaDVD, 1500); // Aparece sutilmente tras abrir  
     }  
 
-    // --- Partículas Cinematográficas de Fondo ---  
+    // --- Partículas de Fondo ---  
     const canvasBg = document.getElementById('bg-canvas');  
     const ctxBg = canvasBg.getContext('2d');  
-
-    function resizeCanvas() {  
-        canvasBg.width = window.innerWidth;  
-        canvasBg.height = window.innerHeight;  
-    }  
+    function resizeCanvas() { canvasBg.width = window.innerWidth; canvasBg.height = window.innerHeight; }  
     window.addEventListener('resize', resizeCanvas);  
     resizeCanvas();  
 
-    let mouseX = canvasBg.width / 2;  
-    let mouseY = canvasBg.height / 2;  
-    document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });  
-    document.addEventListener('touchmove', (e) => {  
-        if(e.touches.length > 0) { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; }  
-    }, {passive: true});  
+    let mouseX = window.innerWidth/2, mouseY = window.innerHeight/2;  
+    document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });  
+    document.addEventListener('touchmove', e => { if(e.touches.length > 0) { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; } }, {passive:true});  
 
     class Particle {  
         constructor() {  
-            this.x = mouseX;  
-            this.y = mouseY;  
-            this.speedX = Math.random() * 5 - 2.5;  
-            this.speedY = Math.random() * -7 - 2;  
+            this.x = mouseX; this.y = mouseY;  
+            this.speedX = Math.random() * 5 - 2.5; this.speedY = Math.random() * -7 - 2;  
             this.size = Math.random() * 3.5 + 1;  
             this.color = Math.random() > 0.35 ? '#1e90ff' : '#ffffff';  
-            this.opacity = 1;  
-            this.decay = Math.random() * 0.012 + 0.006;  
+            this.opacity = 1; this.decay = Math.random() * 0.012 + 0.006;  
         }  
         draw() {  
-            ctxBg.save();  
-            ctxBg.globalAlpha = this.opacity;  
-            ctxBg.beginPath();  
-            ctxBg.arc(this.x, this.y, this.size, 0, Math.PI * 2);  
-            ctxBg.fillStyle = this.color;  
-            ctxBg.shadowBlur = 12;  
-            ctxBg.shadowColor = this.color;  
-            ctxBg.fill();  
-            ctxBg.restore();  
+            ctxBg.save(); ctxBg.globalAlpha = this.opacity; ctxBg.beginPath();  
+            ctxBg.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctxBg.fillStyle = this.color;  
+            ctxBg.shadowBlur = 12; ctxBg.shadowColor = this.color; ctxBg.fill(); ctxBg.restore();  
         }  
-        update() {  
-            this.x += this.speedX;  
-            this.y += this.speedY;  
-            this.speedY += 0.07;  
-            this.size *= 0.98;  
-            this.opacity -= this.decay;  
-        }  
+        update() { this.x += this.speedX; this.y += this.speedY; this.speedY += 0.07; this.size *= 0.98; this.opacity -= this.decay; }  
     }  
-
     let particles = [];  
     function loopBg() {  
-        ctxBg.fillStyle = 'rgba(2, 2, 8, 0.2)';  
-        ctxBg.fillRect(0, 0, canvasBg.width, canvasBg.height);  
+        ctxBg.fillStyle = 'rgba(2, 2, 8, 0.2)'; ctxBg.fillRect(0, 0, canvasBg.width, canvasBg.height);  
         if (particles.length < 50) particles.push(new Particle());  
         for (let i = particles.length - 1; i >= 0; i--) {  
-            particles[i].update();  
-            particles[i].draw();  
+            particles[i].update(); particles[i].draw();  
             if (particles[i].opacity <= 0 || particles[i].size <= 0.1) particles.splice(i, 1);  
         }  
         requestAnimationFrame(loopBg);  
     }  
     loopBg();  
 
-    // --- Sistema de Mini-juego Dino Focas ---  
+    // --- SISTEMA FOCA BOUNCING DVD ---  
+    const fvd = document.getElementById('foca-dvd');  
+    const fctx = fvd.getContext('2d');  
+    fvd.width = 75; fvd.height = 75;  
+
+    // Renderizar foca dentro de su propio canvas flotante  
+    function drawDVDFoca() {  
+        fctx.clearRect(0,0,75,75);  
+        fctx.fillStyle = '#FFD700'; fctx.beginPath(); fctx.ellipse(37, 42, 26, 18, 0, 0, Math.PI*2); fctx.fill();  
+        fctx.beginPath(); fctx.arc(55, 30, 11, 0, Math.PI*2); fctx.fill();  
+        fctx.beginPath(); fctx.moveTo(15, 42); fctx.lineTo(5, 32); fctx.lineTo(5, 52); fctx.closePath(); fctx.fill();  
+        fctx.fillStyle = '#000'; fctx.beginPath(); fctx.arc(57, 28, 2, 0, Math.PI*2); fctx.fill();  
+    }  
+    drawDVDFoca();  
+
+    let fdx = 2.5, fdy = 2.5, fpx = 20, fpy = 20;  
+    let dvdInterval = null;  
+    let isCaught = false;  
+
+    function initFocaDVD() {  
+        fvd.style.display = 'block';  
+        dvdInterval = setInterval(() => {  
+            if(isCaught) return;  
+            fpx += fdx; fpy += fdy;  
+            
+            // Rebotar bordes de pantalla de forma estable  
+            if(fpx <= 0 || fpx >= window.innerWidth - 75) { fdx *= -1; accelerateDVD(); }  
+            if(fpy <= 0 || fpy >= window.innerHeight - 75) { fdy *= -1; accelerateDVD(); }  
+
+            fvd.style.left = fpx + 'px';  
+            fvd.style.top = fpy + 'px';  
+        }, 16);  
+    }  
+
+    function accelerateDVD() {  
+        fdx += (fdx > 0 ? 0.35 : -0.35);  
+        fdy += (fdy > 0 ? 0.35 : -0.35);  
+    }  
+
+    function catchFoca(e) {  
+        if(e) e.stopPropagation();  
+        if(isCaught) return;  
+        isCaught = true;  
+        clearInterval(dvdInterval);  
+        fvd.style.display = 'none';  
+
+        // Ocultar la carta para enfocar la Polaroid  
+        document.getElementById('relic-scene').style.display = 'none';  
+
+        // Lanzar efecto glitch  
+        document.body.classList.add('glitch-active');  
+
+        setTimeout(() => {  
+            document.body.classList.remove('glitch-active');  
+            const polaroid = document.getElementById('polaroid-container');  
+            polaroid.style.display = 'flex';  
+            setTimeout(() => {  
+                polaroid.style.transform = 'scale(1) rotate(-4deg)';  
+            }, 50);  
+        }, 800);  
+    }  
+
+    // --- MINI-JUEGO CORREDOR ---  
     const gameCanvas = document.getElementById('game-canvas');  
     const gctx = gameCanvas.getContext('2d');  
-      
     function resizeGame() {  
         gameCanvas.width = document.getElementById('game-container').clientWidth;  
         gameCanvas.height = document.getElementById('game-container').clientHeight;  
@@ -380,54 +441,25 @@
 
     let focaYellow = {x: 60, y: gameCanvas.height-35, width: 34, height: 24, vy: 0, jumping: false, color: '#FFD700', eyeColor: '#000'};  
     let focaBrown = {x: 110, y: gameCanvas.height-35, width: 34, height: 24, vy: 0, jumping: false, color: '#8B4513', eyeColor: '#FFF'};  
-    let obstacles = [];  
-    let score = 0;  
-    let gameOver = false;  
-    let animationId = null;  
+    let obstacles = []; let score = 0; let gameOver = false; let animationId = null;  
 
     function drawFoca(f) {  
-        gctx.save();  
-        gctx.fillStyle = f.color;  
-        gctx.beginPath();  
-        gctx.ellipse(f.x + 17, f.y + 14, 16, 10, 0, 0, Math.PI * 2);  
-        gctx.fill();  
-        gctx.beginPath();  
-        gctx.arc(f.x + 28, f.y + 8, 7, 0, Math.PI * 2);  
-        gctx.fill();  
-        gctx.beginPath();  
-        gctx.moveTo(f.x + 2, f.y + 14);  
-        gctx.lineTo(f.x - 4, f.y + 8);  
-        gctx.lineTo(f.x - 4, f.y + 20);  
-        gctx.closePath();  
-        gctx.fill();  
-        gctx.fillStyle = f.eyeColor;  
-        gctx.beginPath();  
-        gctx.arc(f.x + 29, f.y + 7, 1.5, 0, Math.PI * 2);  
-        gctx.fill();  
-        gctx.restore();  
+        gctx.save(); gctx.fillStyle = f.color; gctx.beginPath(); gctx.ellipse(f.x + 17, f.y + 14, 16, 10, 0, 0, Math.PI * 2); gctx.fill();  
+        gctx.beginPath(); gctx.arc(f.x + 28, f.y + 8, 7, 0, Math.PI * 2); gctx.fill(); gctx.beginPath(); gctx.moveTo(f.x + 2, f.y + 14);  
+        gctx.lineTo(f.x - 4, f.y + 8); gctx.lineTo(f.x - 4, f.y + 20); gctx.closePath(); gctx.fill(); gctx.fillStyle = f.eyeColor;  
+        gctx.beginPath(); gctx.arc(f.x + 29, f.y + 7, 1.5, 0, Math.PI * 2); gctx.fill(); gctx.restore();  
     }  
 
     function drawIceberg(obs) {  
-        gctx.save();  
-        gctx.fillStyle = '#1e90ff';  
-        gctx.strokeStyle = '#ffffff';  
-        gctx.lineWidth = 2;  
-        gctx.beginPath();  
-        gctx.moveTo(obs.x, obs.y + obs.height);  
-        gctx.lineTo(obs.x + obs.width / 2, obs.y);  
-        gctx.lineTo(obs.x + obs.width, obs.y + obs.height);  
-        gctx.closePath();  
-        gctx.fill();  
-        gctx.stroke();  
-        gctx.restore();  
+        gctx.save(); gctx.fillStyle = '#1e90ff'; gctx.strokeStyle = '#ffffff'; gctx.lineWidth = 2; gctx.beginPath();  
+        gctx.moveTo(obs.x, obs.y + obs.height); gctx.lineTo(obs.x + obs.width / 2, obs.y); gctx.lineTo(obs.x + obs.width, obs.y + obs.height);  
+        gctx.closePath(); gctx.fill(); gctx.stroke(); gctx.restore();  
     }  
 
     function jump() {  
         if(gameOver) { resetGame(); return; }  
         if(animationId === null) { gameLoop(); const au = document.getElementById('mysong'); if(au.paused) toggleAudio(); return; }  
-        [focaYellow, focaBrown].forEach(f => {  
-            if(!f.jumping) { f.vy = -7.5; f.jumping = true; }  
-        });  
+        [focaYellow, focaBrown].forEach(f => { if(!f.jumping) { f.vy = -7.5; f.jumping = true; } });  
     }  
 
     document.addEventListener('keydown', e => { if(e.code==='Space'||e.code==='ArrowUp'){ e.preventDefault(); jump(); } });  
@@ -437,13 +469,10 @@
     function gameLoop() {  
         if(gameOver) return;  
         gctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);  
-          
-        gctx.fillStyle = '#222530';  
-        gctx.fillRect(0, gameCanvas.height-5, gameCanvas.width, 5);  
+        gctx.fillStyle = '#222530'; gctx.fillRect(0, gameCanvas.height-5, gameCanvas.width, 5);  
 
         [focaYellow, focaBrown].forEach(f => {  
-            f.vy += 0.38;  
-            f.y += f.vy;  
+            f.vy += 0.38; f.y += f.vy;  
             if(f.y >= gameCanvas.height-29) { f.y = gameCanvas.height-29; f.vy = 0; f.jumping = false; }  
             drawFoca(f);  
         });  
@@ -453,20 +482,13 @@
         }  
 
         for(let i = obstacles.length - 1; i >= 0; i--) {  
-            let obs = obstacles[i];  
-            obs.x -= 3.8;  
-            drawIceberg(obs);  
-
+            let obs = obstacles[i]; obs.x -= 3.8; drawIceberg(obs);  
             [focaYellow, focaBrown].forEach(f => {  
                 let fHit = { x: f.x + 4, y: f.y + 2, width: f.width - 8, height: f.height - 4 };  
                 let oHit = { x: obs.x + 3, y: obs.y + 4, width: obs.width - 6, height: obs.height - 4 };  
-
-                if (fHit.x < oHit.x + oHit.width && fHit.x + fHit.width > oHit.x &&  
-                    fHit.y < oHit.y + oHit.height && fHit.y + fHit.height > oHit.y) {  
-                    gameOver = true;  
-                    cancelAnimationFrame(animationId);  
-                    animationId = null;  
-                    setTimeout(() => { alert("¡Chocaron! Pulsa la pantalla para intentarlo de nuevo."); }, 10);  
+                if (fHit.x < oHit.x + oHit.width && fHit.x + fHit.width > oHit.x && fHit.y < oHit.y + oHit.height && fHit.y + fHit.height > oHit.y) {  
+                    gameOver = true; cancelAnimationFrame(animationId); animationId = null;  
+                    setTimeout(() => { alert("¡Chocaron! Pulsa la pantalla para reiniciar."); }, 10);  
                 }  
             });  
             if(obs.x + obs.width < 0) obstacles.splice(i, 1);  
@@ -476,8 +498,7 @@
         document.getElementById('score').innerText = Math.floor(score);  
 
         if(score >= 100) {  
-            cancelAnimationFrame(animationId);  
-            animationId = null;  
+            cancelAnimationFrame(animationId); animationId = null;  
             document.getElementById('game-container').style.display = 'none';  
             document.getElementById('relic-scene').style.display = 'block';  
             return;  
