@@ -33,9 +33,15 @@ body{background:var(--bg-color);overflow:hidden;font-family:var(--font-ui);heigh
 #score{position:absolute;top:10px;right:20px;color:white;font-family:var(--font-ui);font-size:1.2rem;z-index:10;}
 
 /* Relicario */
-#relic-scene{width:90%;max-width:450px;height:350px;position:relative;transform-style:preserve-3d;transition:transform var(--transition-speed);z-index:10;display:none;}
+#relic-scene{width:90%;max-width:450px;height:380px;position:relative;transform-style:preserve-3d;transition:transform var(--transition-speed);z-index:10;display:none;}
 #relic-scene.open {display:block;}
 .relic-wrapper{width:100%;height:100%;position:absolute;transform-style:preserve-3d;transform-origin:center;animation:slowSpin 30s linear infinite;}
+
+.relic-front, .relic-back {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
 .relic-front{width:100%;height:100%;position:absolute;background-color:var(--relic-metal);border-radius:12px;box-shadow:0 30px 90px rgba(0,0,0,0.9);display:flex;overflow:hidden;z-index:5;}
 .relic-door{width:50%;height:100%;position:absolute;top:0;background-color:var(--relic-accent);border:1px solid rgba(255,255,255,0.05);transform-style:preserve-3d;transition:transform var(--transition-speed) cubic-bezier(0.6,-0.28,0.735,0.045),z-index var(--transition-speed);}
 .relic-door.left{left:0;border-radius:12px 0 0 12px;transform-origin:right;border-right:2px solid var(--cobalt-primary);}
@@ -44,16 +50,18 @@ body{background:var(--bg-color);overflow:hidden;font-family:var(--font-ui);heigh
 #relic-scene.open .relic-door.right{transform:rotateY(110deg) translateX(10px);z-index:1;}
 .symbol-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) translateZ(20px);font-size:3rem;color:var(--gold-light);text-shadow:0 0 15px var(--gold-light),0 0 30px var(--cobalt-glow);z-index:10;pointer-events:none;transition:opacity 0.5s;}
 #relic-scene.open .symbol-overlay{opacity:0;}
-.relic-back{width:100%;height:100%;position:absolute;top:0;left:0;background-color:var(--bg-color);border-radius:12px;border:2px solid var(--cobalt-primary);box-shadow:inset 0 0 50px rgba(0,112,255,0.15);z-index:1;padding:40px;transform:translateZ(-10px);overflow-y:auto;opacity:0;transition:opacity 0.5s var(--transition-speed);}
-#relic-scene.open .relic-back{opacity:1;}
-.relic-content{font-family:var(--font-display);font-size:1.15rem;line-height:1.9;color:var(--text-accent);text-align:justify;opacity:0;transform:translateY(20px);transition:opacity 1s 1s,transform 1s 1s;}
-#relic-scene.open .relic-content{opacity:1;transform:translateY(0);}
-.relic-content p{margin-bottom:20px;opacity:0;animation:fadeInText 1s forwards;}
-.relic-content p:nth-child(1){animation-delay:1.2s;}
-.relic-content p:nth-child(2){animation-delay:1.8s;}
-.relic-footer{margin-top:30px;text-align:center;font-size:2rem;color:var(--text-main);opacity:0;animation:fadeInText 1s forwards;animation-delay:2.5s;}
 
-/* Ocultar cursor en dispositivos con ratón */
+.relic-back{width:100%;height:100%;position:absolute;top:0;left:0;background-color:var(--bg-color);border-radius:12px;border:2px solid var(--cobalt-primary);box-shadow:inset 0 0 50px rgba(0,112,255,0.15);z-index:1;padding:25px;transform:translateZ(-10px) rotateY(180deg);overflow-y:auto;opacity:0;transition:opacity 0.5s var(--transition-speed);}
+#relic-scene.open .relic-back{opacity:1;}
+.relic-content{font-family:var(--font-display);font-size:1rem;line-height:1.6;color:var(--text-accent);text-align:justify;opacity:0;transform:translateY(20px);transition:opacity 1s 1s,transform 1s 1s;}
+#relic-scene.open .relic-content{opacity:1;transform:translateY(0);}
+.relic-content p{margin-bottom:15px;opacity:0;animation:fadeInText 1s forwards;}
+.relic-content p:nth-child(1){animation-delay:1.2s;}
+.relic-content p:nth-child(2){animation-delay:2.2s;}
+.relic-content p:nth-child(3){animation-delay:3.2s;}
+.relic-footer{margin-top:15px;text-align:center;font-size:1.8rem;color:var(--text-main);opacity:0;animation:fadeInText 1s forwards;animation-delay:4.2s;}
+
+/* Ocultar cursor en PC */
 @media (pointer: fine) {
     body, #game-container, .relic-front, #music-btn { cursor: none; }
 }
@@ -83,10 +91,11 @@ body{background:var(--bg-color);overflow:hidden;font-family:var(--font-ui);heigh
         </div>
         <div class="relic-back">
             <div class="relic-content">
-                <p>Hace tiempo una bolita amarilla pachona entró a la vida de una bolita café...</p>
-                <p>Actualmente esas dos bolitas están juntas, son lo mejor de los dos mundos...</p>
+                <p>Hace tiempo una bolita amarilla pachona entró a la vida de una bolita café... Desde ese instante, ni el Sincorazón más poderoso ni la oscuridad de ningún mundo pudo apagar la luz que encendieron juntos. Tu corazón es mi Llave Espada, el único lugar al que siempre quiero regresar.</p>
+                <p>Cariño, nuestro amor es el mejor espectáculo que el universo ha visto jamás. Logramos desafiar al destino, romper las barreras y reescribir las estrellas para dejar en claro que este camino lo caminamos juntos, sin importar lo que diga el resto del mundo.</p>
+                <p>Sé que el mundo puede ser caótico y parpadear en un segundo, pero mientras estemos tú y yo, tomados de la mano, todo el ruido se apaga... porque somos hermosos justo ahora, en este perfecto instante eterno.</p>
             </div>
-            <div class="relic-footer">💛🤎</div>
+            <div class="relic-footer">👑✨💛🤎</div>
         </div>
     </div>
 </div>
@@ -102,7 +111,6 @@ function toggleAudio(e){
         audio.play().catch(() => { console.log("Interacción requerida"); });
         icon.innerText = "⏸"; text.innerText = "Pausar";
     } else {
-        audio.maxSpeed
         audio.pause();
         icon.innerText = "▶"; text.innerText = "Reproducir";
     }
@@ -169,12 +177,12 @@ let score=0;
 let gameOver=false;
 let animationId = null; 
 
-// Dibujar Foca Nativa (Adiós Cuadrados)
+// Dibujar Foca
 function drawFoca(f) {
     gctx.save();
     gctx.fillStyle = f.color;
     
-    // Cuerpo (Óvalo horizontal)
+    // Cuerpo
     gctx.beginPath();
     gctx.ellipse(f.x + 17, f.y + 14, 16, 10, 0, 0, Math.PI * 2);
     gctx.fill();
@@ -227,11 +235,11 @@ function jump() {
         return;
     }
     [focaYellow,focaBrown].forEach(f=>{
-        if(!f.jumping){f.vy=-7.5; f.jumping=true;} // Salto sutilmente más cómodo
+        if(!f.jumping){f.vy=-7.5; f.jumping=true;}
     });
 }
 
-// Controles adaptados
+// Controles
 document.addEventListener('keydown',e=>{
     if(e.code==='Space'||e.code==='ArrowUp'){ e.preventDefault(); jump(); }
 });
@@ -256,23 +264,23 @@ function gameLoop(){
 
     // Actualizar y dibujar Focas
     [focaYellow,focaBrown].forEach(f=>{
-        f.vy+=0.38; // Gravedad equilibrada
+        f.vy+=0.38; 
         f.y+=f.vy;
         if(f.y>=gameCanvas.height-29){f.y=gameCanvas.height-29; f.vy=0; f.jumping=false;}
         drawFoca(f);
     });
 
-    // Generar Obstáculos espaciados equitativamente
+    // Generar Obstáculos
     if(Math.random()<0.015 && (obstacles.length === 0 || obstacles[obstacles.length-1].x < gameCanvas.width - 220)) {
         obstacles.push({x:gameCanvas.width, y:gameCanvas.height-32, width:24, height:28});
     }
 
     for(let i=obstacles.length-1;i>=0;i--){
         let obs = obstacles[i];
-        obs.x-=3.8; // Velocidad estable y justa
+        obs.x-=3.8; 
         drawIceberg(obs);
 
-        // HITBOX REAJUSTADA (Más pequeña que el gráfico para evitar muertes injustas)
+        // HITBOX REAJUSTADA
         [focaYellow,focaBrown].forEach(f=>{
             let focaHitbox = { x: f.x + 4, y: f.y + 2, width: f.width - 8, height: f.height - 4 };
             let obsHitbox = { x: obs.x + 3, y: obs.y + 4, width: obs.width - 6, height: obs.height - 4 };
@@ -286,7 +294,7 @@ function gameLoop(){
                 cancelAnimationFrame(animationId);
                 animationId = null;
                 setTimeout(() => {
-                    alert("¡Ups! Chocaron. Toca la pantalla o presiona Espacio para reiniciar de forma justa.");
+                    alert("¡Ups! Chocaron. Toca la pantalla o presiona Espacio para reiniciar.");
                 }, 10);
             }
         });
